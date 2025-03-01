@@ -1,6 +1,7 @@
 package com.maslinka.recipes
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -9,6 +10,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.maslinka.recipes.databinding.ActivityMainBinding
 import com.maslinka.recipes.CategoriesListFragment as CategoriesListFragment
 
@@ -25,6 +27,24 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.commit {
             add<CategoriesListFragment>(binding.fragmentContainerView.id)
+        }
+
+        binding.btnCategory.setOnClickListener {
+            supportFragmentManager.commit {
+                replace<CategoriesListFragment>(binding.fragmentContainerView.id)
+                setReorderingAllowed(true)
+                addToBackStack("name") //для возврата к предыдущему открытому
+            }
+
+        }
+
+        binding.btnFavourites.setOnClickListener {
+            supportFragmentManager.commit {
+                replace<FavouritesFragment>(binding.fragmentContainerView.id)
+                setReorderingAllowed(true)
+                addToBackStack("name")
+            }
+
         }
     }
 }
