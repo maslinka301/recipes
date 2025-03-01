@@ -5,15 +5,35 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/backgroundColor">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginBottom="@dimen/_8dp"
+        android:layout_marginHorizontal="@dimen/_16dp">
+        <Button
+            android:id="@+id/btnCategory"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="@dimen/_8dp"
+            android:text="@string/category"
+            style="@style/StyleNavButton"
+            android:backgroundTint="@color/btnCategoryColor"/>
+
+        <Button
+            android:id="@+id/btnFavourites"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:icon="@drawable/ic_favourites"
+            app:iconGravity="end"
+            android:text="@string/favourites"
+            style="@style/StyleNavButton"
+            android:backgroundTint="@color/btnFavouritesColor"/>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
