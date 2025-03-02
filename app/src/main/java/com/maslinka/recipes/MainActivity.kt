@@ -33,18 +33,16 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.commit {
                 replace<CategoriesListFragment>(binding.fragmentContainerView.id)
                 setReorderingAllowed(true)
-                addToBackStack("name") //для возврата к предыдущему открытому
+                addToBackStack(null)
             }
-
         }
 
         binding.btnFavourites.setOnClickListener {
             supportFragmentManager.commit {
                 replace<FavouritesFragment>(binding.fragmentContainerView.id)
                 setReorderingAllowed(true)
-                addToBackStack("name")
+                addToBackStack(null)
             }
-
         }
     }
 }

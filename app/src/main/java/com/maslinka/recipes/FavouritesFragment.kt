@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.maslinka.recipes.databinding.FragmentFavouritesBinding
 
-class FavouritesFragment: Fragment() {
+class FavouritesFragment : Fragment() {
 
-    var _binding:FragmentFavouritesBinding? = null
-    val binding
+    private var _binding: FragmentFavouritesBinding? = null
+    private val binding
         get() = _binding ?: throw IllegalStateException("binding не инициализировано")
 
     override fun onCreateView(
@@ -20,5 +20,10 @@ class FavouritesFragment: Fragment() {
     ): View {
         _binding = FragmentFavouritesBinding.inflate(inflater)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
