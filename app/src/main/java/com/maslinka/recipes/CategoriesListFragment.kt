@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.maslinka.recipes.databinding.FragmentListCategoriesBinding
 
-class CategoriesListFragment:Fragment() {
+class CategoriesListFragment : Fragment() {
 
-    var _binding : FragmentListCategoriesBinding? = null
-    val binding
+    private var _binding: FragmentListCategoriesBinding? = null
+    private val binding
         get() = _binding ?: throw IllegalStateException("binding не инициализировано")
 
     override fun onCreateView(
@@ -22,6 +22,9 @@ class CategoriesListFragment:Fragment() {
         return binding.root
     }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
 }
