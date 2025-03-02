@@ -23,11 +23,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        supportFragmentManager.commit {
-            add<CategoriesListFragment>(binding.fragmentContainerView.id)
-            setReorderingAllowed(true)
-            addToBackStack(null)
+        //проверка, что активность новая (только что созданная), а не восстановленная (как, например, при повороте)
+        //если активность новая, то добавляем фрагмент, а если не новая, значит фрагмент уже добавлен
+        if (savedInstanceState == null){
+            supportFragmentManager.commit {
+                add<CategoriesListFragment>(binding.fragmentContainerView.id)
+                setReorderingAllowed(true)
+            }
         }
+
 
         binding.btnCategory.setOnClickListener {
             supportFragmentManager.commit {
