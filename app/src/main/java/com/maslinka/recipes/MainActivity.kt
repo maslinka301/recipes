@@ -5,17 +5,26 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.add
+import androidx.fragment.app.commit
 import com.maslinka.recipes.databinding.ActivityMainBinding
+import com.maslinka.recipes.CategoriesListFragment as CategoriesListFragment
 
 class MainActivity : AppCompatActivity() {
-    private var _binding: ActivityMainBinding? = null
-    private val binding
-        get() = _binding ?: throw IllegalStateException("binding не инициализировано")
 
+    //биндинг будет инициализирован с помощью inflate() только при первом обращении к нему
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        supportFragmentManager.commit {
+            add<CategoriesListFragment>(binding.fragmentContainerView.id)
+            setReorderingAllowed(true)
+            addToBackStack(null)
+        }
     }
 }
