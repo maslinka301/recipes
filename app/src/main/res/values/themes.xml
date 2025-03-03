@@ -8,5 +8,9 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="Theme.Recipes" parent="Base.Theme.Recipes" />
+    <style name="Theme.Recipes" parent="Base.Theme.Recipes">
+        <item name="android:statusBarColor">@color/backgroundColor</item>
+        <item name="android:navigationBarColor">@color/backgroundColor</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
 </resources>
