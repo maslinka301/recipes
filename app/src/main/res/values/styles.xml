@@ -11,4 +11,26 @@
         <item name="cornerRadius">@dimen/_8dp</item>
         <item name="android:textAppearance">@style/StyleTitle14</item>
     </style>
+    
+    <style name="StyleTitleCategory" parent="TextAppearance.AppCompat">
+        <item name="android:layout_margin">@dimen/_16dp</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_semi_bold</item>
+        <item name="android:padding">@dimen/_10dp</item>
+        <item name="android:textColor">@color/titleCategoryColor</item>
+        <item name="android:textSize">@dimen/_20sp</item>
+    </style>
+
+    <style name="StyleRecyclerViewItemTitle" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/montserrat_alternates_semi_bold</item>
+        <item name="android:textSize">@dimen/_14sp</item>
+        <item name="android:textColor">@color/titleCategoryColor</item>
+        <item name="android:layout_margin">@dimen/_8dp</item>
+    </style>
+
+    <style name="StyleRecyclerViewItemDescription" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+        <item name="android:textSize">@dimen/_12sp</item>
+        <item name="android:layout_marginHorizontal">@dimen/_8dp</item>
+        <item name="android:layout_marginBottom">@dimen/_8dp</item>
+    </style>
 </resources>
