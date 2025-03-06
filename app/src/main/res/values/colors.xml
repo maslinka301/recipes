@@ -6,4 +6,5 @@
     <color name="btnCategoryColor">#525DC0</color>
     <color name="btnFavouritesColor">#E13E3E</color>
     <color name="titleCategoryColor">#5F3678</color>
+    <color name="descriptionCategoryColor">#666666</color>
 </resources>
