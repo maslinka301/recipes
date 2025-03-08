@@ -20,7 +20,7 @@
         <ImageView
             android:id="@+id/ivCategoryImage"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="@dimen/_130dp"
             android:contentDescription="@string/content_description_image_category"
             android:scaleType="centerCrop"
             tools:src="@drawable/bcg_categories" />

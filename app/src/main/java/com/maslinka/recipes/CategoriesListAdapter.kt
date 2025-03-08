@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.maslinka.recipes.databinding.ItemCategoryBinding
@@ -12,6 +13,19 @@ import java.io.IOException
 
 class CategoriesListAdapter(private val dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
+
+    //переменная хранит экземпляр слушателя для колбека
+    var itemClickListener: onItemClickListener? = null
+
+    //Интерфейс для колбека
+    interface onItemClickListener{
+        fun onItemClick()
+    }
+
+    fun setOnItemClickListener(listener: onItemClickListener){
+        itemClickListener = listener
+    }
+
     class ViewHolder(val binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(category: Category) {
@@ -19,6 +33,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
             binding.tvCategoryDescription.text = category.title
             binding.ivCategoryImage
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -48,7 +63,17 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
             }
         holder.binding.ivCategoryImage.setImageDrawable(drawable)
         holder.binding.ivCategoryImage.scaleType = ImageView.ScaleType.CENTER_CROP
+        holder.binding.ivCategoryImage.contentDescription = "${dataSet[position].title} ${R.string.content_description_image_category}"
+        Log.d("!!!", "${dataSet[position].title} ${R.string.content_description_image_category}")
 
+        holder.binding.root.setOnClickListener {
+            itemClickListener?.onItemClick()
+        }
     }
+
+
+
+
+
 
 }
