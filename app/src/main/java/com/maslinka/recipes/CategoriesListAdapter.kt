@@ -4,7 +4,6 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.maslinka.recipes.databinding.ItemCategoryBinding
@@ -63,8 +62,8 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
             }
         holder.binding.ivCategoryImage.setImageDrawable(drawable)
         holder.binding.ivCategoryImage.scaleType = ImageView.ScaleType.CENTER_CROP
-        holder.binding.ivCategoryImage.contentDescription = "${dataSet[position].title} ${R.string.content_description_image_category}"
-        Log.d("!!!", "${dataSet[position].title} ${R.string.content_description_image_category}")
+        holder.binding.ivCategoryImage.contentDescription = "${dataSet[position].title} ${holder.binding.root.context.getString(R.string.content_description_image_category)}"
+        Log.d("!!!", "${dataSet[position].title} ${holder.binding.root.context.getString(R.string.content_description_image_category)}")
 
         holder.binding.root.setOnClickListener {
             itemClickListener?.onItemClick()

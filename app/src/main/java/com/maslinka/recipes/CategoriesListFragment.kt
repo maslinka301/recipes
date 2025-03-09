@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import com.maslinka.recipes.databinding.ActivityMainBinding
 import com.maslinka.recipes.databinding.FragmentListCategoriesBinding
 
 class CategoriesListFragment : Fragment() {
@@ -44,7 +42,6 @@ class CategoriesListFragment : Fragment() {
                 openRecipesByCategoryId()
             }
         })
-
     }
 
     fun openRecipesByCategoryId(){
@@ -53,8 +50,5 @@ class CategoriesListFragment : Fragment() {
             setReorderingAllowed(true)
             addToBackStack(null)
         }
-
     }
-
-
 }
