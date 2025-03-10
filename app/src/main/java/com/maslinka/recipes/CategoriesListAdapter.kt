@@ -14,24 +14,18 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
     //переменная хранит экземпляр слушателя для колбека
-    var itemClickListener: onItemClickListener? = null
+    private var itemClickListener: OnItemClickListener? = null
 
     //Интерфейс для колбека
-    interface onItemClickListener{
+    interface OnItemClickListener {
         fun onItemClick()
     }
 
-    fun setOnItemClickListener(listener: onItemClickListener){
+    fun setOnItemClickListener(listener: OnItemClickListener) {
         itemClickListener = listener
     }
 
     class ViewHolder(val binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(category: Category) {
-            binding.tvCategoryTitle.text = category.title
-            binding.tvCategoryDescription.text = category.title
-            binding.ivCategoryImage
-        }
 
     }
 
@@ -62,17 +56,15 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
             }
         holder.binding.ivCategoryImage.setImageDrawable(drawable)
         holder.binding.ivCategoryImage.scaleType = ImageView.ScaleType.CENTER_CROP
-        holder.binding.ivCategoryImage.contentDescription = "${dataSet[position].title} ${holder.binding.root.context.getString(R.string.content_description_image_category)}"
-        Log.d("!!!", "${dataSet[position].title} ${holder.binding.root.context.getString(R.string.content_description_image_category)}")
+        holder.binding.ivCategoryImage.contentDescription = String.format(
+            holder.binding.root.context.getString(R.string.content_description_category_item),
+            dataSet[position].title.lowercase()
+        )
 
         holder.binding.root.setOnClickListener {
             itemClickListener?.onItemClick()
         }
     }
-
-
-
-
 
 
 }
