@@ -13,4 +13,8 @@ object STUB {
     fun getCategories(): List<Category> {
         return categories
     }
+
+    fun getCategory(categoryId: Int): Category {
+        return categories[categoryId]
+    }
 }

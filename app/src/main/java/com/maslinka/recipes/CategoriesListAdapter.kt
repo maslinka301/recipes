@@ -18,7 +18,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
 
     //Интерфейс для колбека
     interface OnItemClickListener {
-        fun onItemClick()
+        fun onItemClick(categoryId: Int)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
@@ -62,7 +62,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         )
 
         holder.binding.root.setOnClickListener {
-            itemClickListener?.onItemClick()
+            itemClickListener?.onItemClick(dataSet[position].id)
         }
     }
 
