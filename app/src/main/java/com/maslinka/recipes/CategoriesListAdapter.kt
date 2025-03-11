@@ -12,13 +12,21 @@ import java.io.IOException
 
 class CategoriesListAdapter(private val dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
+
+    //переменная хранит экземпляр слушателя для колбека
+    private var itemClickListener: OnItemClickListener? = null
+
+    //Интерфейс для колбека
+    interface OnItemClickListener {
+        fun onItemClick()
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        itemClickListener = listener
+    }
+
     class ViewHolder(val binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(category: Category) {
-            binding.tvCategoryTitle.text = category.title
-            binding.tvCategoryDescription.text = category.title
-            binding.ivCategoryImage
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -48,7 +56,15 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
             }
         holder.binding.ivCategoryImage.setImageDrawable(drawable)
         holder.binding.ivCategoryImage.scaleType = ImageView.ScaleType.CENTER_CROP
+        holder.binding.ivCategoryImage.contentDescription = String.format(
+            holder.binding.root.context.getString(R.string.content_description_category_item),
+            dataSet[position].title.lowercase()
+        )
 
+        holder.binding.root.setOnClickListener {
+            itemClickListener?.onItemClick()
+        }
     }
+
 
 }
