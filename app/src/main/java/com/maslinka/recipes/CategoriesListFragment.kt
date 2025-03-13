@@ -9,6 +9,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import com.maslinka.recipes.Constants.ARG_CATEGORY_ID
+import com.maslinka.recipes.Constants.ARG_CATEGORY_IMAGE_URL
+import com.maslinka.recipes.Constants.ARG_CATEGORY_NAME
 import com.maslinka.recipes.databinding.FragmentListCategoriesBinding
 
 class CategoriesListFragment : Fragment() {
@@ -49,13 +52,14 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {
-        val categoryName = STUB.getCategory(categoryId).title
-        val categoryImageUrl = STUB.getCategory(categoryId).imageUrl
+        val currCategory = STUB.getCategory(categoryId)
+        val categoryName = currCategory.title
+        val categoryImageUrl = currCategory.imageUrl
 
         val bundle = bundleOf(
-            "ARG_CATEGORY_ID" to categoryId,
-            "ARG_CATEGORY_NAME" to categoryName,
-            "ARG_CATEGORY_IMAGE_URL" to categoryImageUrl
+            ARG_CATEGORY_ID to categoryId,
+            ARG_CATEGORY_NAME to categoryName,
+            ARG_CATEGORY_IMAGE_URL to categoryImageUrl
         )
         parentFragmentManager.commit {
             replace<RecipesListFragment>(R.id.fragmentContainerView, args = bundle)
