@@ -24,7 +24,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/shape_drawable"
             android:text="@string/title_categories"
-            android:textAllCaps="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             style="@style/StyleTitleCategory"/>
