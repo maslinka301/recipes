@@ -57,7 +57,7 @@ object STUB {
                 "Смажьте верхнюю часть булочки майонезом, кетчупом и горчицей.",
                 "Положите верхнюю часть булочки на остальные ингредиенты и подавайте."
             ),
-            imageUrl = "burger-hamburger.png"
+            imageUrl = "Property 1=burger-hamburger.png"
         ),
         Recipe(
             id = 1,
@@ -85,7 +85,7 @@ object STUB {
                 "Смажьте верхнюю часть булочки майонезом, кетчупом и горчицей.",
                 "Положите верхнюю часть булочки на остальные ингредиенты и подавайте."
             ),
-            imageUrl = "burger-cheeseburger.png"
+            imageUrl = "Property 1=burger-cheeseburger.png"
         ),
         Recipe(
             id = 2,
@@ -113,7 +113,7 @@ object STUB {
                 "Смажьте верхнюю часть булочки майонезом, кетчупом и горчицей.",
                 "Положите верхнюю часть булочки на остальные ингредиенты и подавайте."
             ),
-            imageUrl = "burger-mushrooms.png"
+            imageUrl = "Property 1=burger-mushrooms.png"
         ),
         Recipe(
             id = 3,
@@ -141,7 +141,7 @@ object STUB {
                 "Смажьте верхнюю часть булочки майонезом, кетчупом и горчицей.",
                 "Положите верхнюю часть булочки на остальные ингредиенты и подавайте."
             ),
-            imageUrl = "burger-avocado.png"
+            imageUrl = "Property 1=burger-avocado.png"
         ),
         Recipe(
             id = 4,
@@ -166,7 +166,7 @@ object STUB {
                 "Смажьте верхнюю часть булочки майонезом, кетчупом и горчицей.",
                 "Положите верхнюю часть булочки на остальные ингредиенты и подавайте."
             ),
-            imageUrl = "burger-fish.png"
+            imageUrl = "Property 1=burger-fish.png"
         ),
         Recipe(
             id = 5,
@@ -194,7 +194,7 @@ object STUB {
                 "Смажьте верхнюю часть булочки майонезом, кетчупом и горчицей.",
                 "Положите верхнюю часть булочки на остальные ингредиенты и подавайте."
             ),
-            imageUrl = "burger-bacon.png"
+            imageUrl = "Property 1=burger-bacon.png"
         ),
         Recipe(
             id = 6,
@@ -221,7 +221,7 @@ object STUB {
                 "Смажьте верхнюю часть булочки томатным соусом и горчицей.",
                 "Положите верхнюю часть булочки на остальные ингредиенты и подавайте."
             ),
-            imageUrl = "burger-vegan.png"
+            imageUrl = "Property 1=burger-vegan.png"
         ),
         Recipe(
             id = 7,
@@ -248,7 +248,7 @@ object STUB {
                 "Смажьте верхнюю часть булочки майонезом, кетчупом и соусом табаско.",
                 "Положите верхнюю часть булочки на остальные ингредиенты и подавайте."
             ),
-            imageUrl = "burger-chili.png"
+            imageUrl = "Property 1=burger-chili.png"
         )
     )
 

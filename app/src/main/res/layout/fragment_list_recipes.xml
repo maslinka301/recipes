@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
+            android:id="@+id/ivRecipeHeaderImage"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_224dp"
             tools:src="@drawable/bcg_categories"
@@ -20,6 +21,7 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
+            android:id="@+id/tvRecipeHeaderTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -33,10 +35,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRecipes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="@dimen/_16dp"
-        android:layout_marginTop="@dimen/_16dp"/>
+        android:layout_margin="@dimen/_8dp"
+        tools:listitem="@layout/item_recipe"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 
 </LinearLayout>
