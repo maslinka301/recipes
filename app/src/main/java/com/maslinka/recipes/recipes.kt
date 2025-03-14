@@ -15,7 +15,7 @@ object STUB {
     }
 
     fun getCategory(categoryId: Int): Category {
-        return categories[categoryId]
+        return categories.getOrNull(categoryId) ?: categories[0]
     }
 
     fun getRecipesByCategoryId(categoryId: Int) : List<Recipe>{
