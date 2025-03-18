@@ -13,7 +13,7 @@ import androidx.fragment.app.replace
 import com.maslinka.recipes.Constants.ARG_CATEGORY_ID
 import com.maslinka.recipes.Constants.ARG_CATEGORY_IMAGE_URL
 import com.maslinka.recipes.Constants.ARG_CATEGORY_NAME
-import com.maslinka.recipes.Constants.ARG_RECIPE_ID
+import com.maslinka.recipes.Constants.ARG_RECIPE
 import com.maslinka.recipes.databinding.FragmentListRecipesBinding
 import java.io.IOException
 
@@ -40,9 +40,9 @@ class RecipesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initBundleData()
         categoryId?.let { initRecycler(it) }
-        binding.tvRecipeHeaderTitle.text = categoryName
-        binding.ivRecipeHeaderImage.setImageDrawable(getCategoryImageFromAssets())
+        initUI()
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -83,11 +83,17 @@ class RecipesListFragment : Fragment() {
     }
 
     fun openRecipeByRecipeId(recipeId: Int) {
+        val currRecipe = STUB.getRecipeById(recipeId)
+        val bundle = bundleOf(ARG_RECIPE to currRecipe)
         parentFragmentManager.commit {
-            replace<RecipeFragment>(R.id.fragmentContainerView)
+            replace<RecipeFragment>(R.id.fragmentContainerView, args = bundle)
             setReorderingAllowed(true)
             addToBackStack(null)
         }
+    }
 
+    private fun initUI() {
+        binding.tvRecipeHeaderTitle.text = categoryName
+        binding.ivRecipeHeaderImage.setImageDrawable(getCategoryImageFromAssets())
     }
 }

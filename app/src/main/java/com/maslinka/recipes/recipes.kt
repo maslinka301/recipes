@@ -18,14 +18,14 @@ object STUB {
         return categories.getOrNull(categoryId) ?: categories[0]
     }
 
-    fun getRecipesByCategoryId(categoryId: Int) : List<Recipe>{
-        return if(categoryId == 0)
+    fun getRecipesByCategoryId(categoryId: Int): List<Recipe> {
+        return if (categoryId == 0)
             burgerRecipes
         else
             listOf()
     }
 
-    fun getBurgerRecipe(recipeId: Int): Recipe{
+    fun getRecipeById(recipeId: Int): Recipe {
         return burgerRecipes[recipeId]
     }
 
