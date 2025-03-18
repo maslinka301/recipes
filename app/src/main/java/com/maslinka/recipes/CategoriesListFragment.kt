@@ -39,14 +39,25 @@ class CategoriesListFragment : Fragment() {
         _binding = null
     }
 
+    //    private fun initRecycler2() {
+//        val categoriesListAdapter = CategoriesListAdapter(STUB.getCategories())
+//        binding.rvCategories.adapter = categoriesListAdapter
+//        Log.d("!!!", "Инициализация адаптера")
+//        categoriesListAdapter.setOnItemClickListener(object :
+//            CategoriesListAdapter.OnItemClickListener {
+//            override fun onItemClick(categoryId: Int) {
+//                openRecipesByCategoryId(categoryId)
+//            }
+//        })
+//    }
     private fun initRecycler() {
-        val categoriesListAdapter = CategoriesListAdapter(STUB.getCategories())
+        val categoriesListAdapter = RecyclerViewsAdapter(STUB.getCategories())
         binding.rvCategories.adapter = categoriesListAdapter
         Log.d("!!!", "Инициализация адаптера")
         categoriesListAdapter.setOnItemClickListener(object :
-            CategoriesListAdapter.OnItemClickListener {
-            override fun onItemClick(categoryId: Int) {
-                openRecipesByCategoryId(categoryId)
+            RecyclerViewsAdapter.OnItemClickListener {
+            override fun onItemClick(itemId: Int) {
+                openRecipesByCategoryId(itemId)
             }
         })
     }

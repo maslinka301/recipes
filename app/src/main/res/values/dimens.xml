@@ -10,4 +10,6 @@
     <dimen name="_20sp">20sp</dimen>
     <dimen name="_12sp">12sp</dimen>
     <dimen name="_130dp">130dp</dimen>
+    <dimen name="_100dp">100dp</dimen>
+    <dimen name="_32dp">32dp</dimen>
 </resources>
