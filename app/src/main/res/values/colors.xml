@@ -7,4 +7,6 @@
     <color name="btnFavouritesColor">#E13E3E</color>
     <color name="titleCategoryColor">#5F3678</color>
     <color name="descriptionCategoryColor">#666666</color>
+    <color name="titleOnRecipeFragmentColor">#422952</color>
+    <color name="decoratorColor">#F5F5F5</color>
 </resources>

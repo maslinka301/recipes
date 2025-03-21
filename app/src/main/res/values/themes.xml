@@ -6,11 +6,13 @@
         <item name="android:statusBarColor">@color/backgroundColor</item>
         <item name="android:navigationBarColor">@color/backgroundColor</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="materialDividerStyle">@color/decoratorColor</item>
     </style>
 
     <style name="Theme.Recipes" parent="Base.Theme.Recipes">
         <item name="android:statusBarColor">@color/backgroundColor</item>
         <item name="android:navigationBarColor">@color/backgroundColor</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="materialDividerStyle">@color/decoratorColor</item>
     </style>
 </resources>
