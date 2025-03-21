@@ -93,7 +93,7 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun initUI() {
-        binding.tvRecipeHeaderTitle.text = categoryName
-        binding.ivRecipeHeaderImage.setImageDrawable(getCategoryImageFromAssets())
+        binding.tvRecipeListHeaderTitle.text = categoryName
+        binding.ivRecipeListHeaderImage.setImageDrawable(getCategoryImageFromAssets())
     }
 }
