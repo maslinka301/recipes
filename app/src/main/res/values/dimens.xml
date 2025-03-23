@@ -12,4 +12,6 @@
     <dimen name="_130dp">130dp</dimen>
     <dimen name="_100dp">100dp</dimen>
     <dimen name="_32dp">32dp</dimen>
+    <dimen name="_242dp">242dp</dimen>
+    <dimen name="_12dp">12dp</dimen>
 </resources>

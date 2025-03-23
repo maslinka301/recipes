@@ -36,4 +36,25 @@
         <item name="android:layout_marginBottom">@dimen/_8dp</item>
         <item name="android:textColor">@color/descriptionCategoryColor</item>
     </style>
+
+    <style name="StyleOfTitleInRecipeFragment" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/montserrat_alternates_semi_bold</item>
+        <item name="android:textSize">@dimen/_20sp</item>
+        <item name="android:textColor">@color/titleOnRecipeFragmentColor</item>
+        <item name="textAllCaps">true</item>
+    </style>
+
+    <style name="StyleIngredientsListItems" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+        <item name="android:textSize">@dimen/_14sp</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:textColor">@color/descriptionCategoryColor</item>
+    </style>
+
+    <style name="StyleMethodListItems" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+        <item name="android:textSize">@dimen/_14sp</item>
+        <item name="android:textColor">@color/descriptionCategoryColor</item>
+    </style>
+
 </resources>
