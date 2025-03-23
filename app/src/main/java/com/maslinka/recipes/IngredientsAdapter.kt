@@ -8,6 +8,9 @@ import com.maslinka.recipes.databinding.ItemCategoryListBinding
 
 class IngredientsAdapter(val dataSet: List<Ingredient>) :
     Adapter<IngredientsAdapter.IngredientViewHolder>() {
+
+    private var quantity = 1
+
     class IngredientViewHolder(val binding: ItemCategoryListBinding) : ViewHolder(binding.root) {
 
     }
@@ -23,8 +26,21 @@ class IngredientsAdapter(val dataSet: List<Ingredient>) :
     }
 
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
-        holder.binding.tvIngredientTitle.text = dataSet[position].description
+        val amount = (dataSet[position].quantity).toDouble() * quantity
         holder.binding.tvIngredientAmount.text =
-            "${dataSet[position].quantity} ${dataSet[position].unitOfMeasure}"
+            if (amount % 1 == 0.0) {
+                "${amount.toInt()} ${dataSet[position].unitOfMeasure}"
+            } else {
+                "${amount.toString().format("%.1f")} ${dataSet[position].unitOfMeasure}"
+            }
+
+        holder.binding.tvIngredientTitle.text = dataSet[position].description
+//        holder.binding.tvIngredientAmount.text =
+//            "${amount} ${dataSet[position].unitOfMeasure}"
+    }
+
+    fun updateIngredients(progress: Int) {
+        quantity = progress
+        notifyDataSetChanged()
     }
 }

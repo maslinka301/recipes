@@ -53,6 +53,22 @@
                 android:layout_height="wrap_content"
                 android:text="@string/ingredients_list_title" />
 
+            <TextView
+                android:id="@+id/tvServings"
+                tools:text="Порции"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="@style/StyleServingsNumber"
+                android:layout_marginVertical="@dimen/_6dp"/>
+
+            <SeekBar
+                android:id="@+id/sbServingsNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:min="1"
+                android:max="5"
+                android:layout_marginBottom="@dimen/_16dp"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvIngredients"
                 android:layout_width="match_parent"
@@ -66,7 +82,8 @@
                 style="@style/StyleOfTitleInRecipeFragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cooking_method" />
+                android:text="@string/cooking_method"
+                android:layout_marginVertical="@dimen/_16dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvMethod"

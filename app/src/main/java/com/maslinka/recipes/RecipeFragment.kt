@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -53,6 +54,7 @@ class RecipeFragment : Fragment() {
         binding.ivRecipeListHeaderImage.contentDescription =
             String.format(getString(R.string.content_description_recipe_item), recipe.title)
         binding.tvRecipeListHeaderTitle.text = recipe.title
+        binding.tvServings.text = String.format(getString(R.string.number_of_servings), 1)
         initRecycler(recipe)
     }
 
@@ -61,12 +63,36 @@ class RecipeFragment : Fragment() {
             binding.rvIngredients.context,
             LinearLayoutManager.VERTICAL
         )
+        dividerItemDecoration.apply {
+            isLastItemDecorated = false
+            dividerInsetStart = 12
+            dividerInsetEnd = 12
+        }
         val ingredientsAdapter = IngredientsAdapter(recipe.ingredients)
         val methodAdapter = MethodAdapter(recipe.method)
         binding.rvIngredients.adapter = ingredientsAdapter
         binding.rvIngredients.addItemDecoration(dividerItemDecoration)
         binding.rvMethod.adapter = methodAdapter
         binding.rvMethod.addItemDecoration(dividerItemDecoration)
+
+        binding.sbServingsNumber.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                ingredientsAdapter.updateIngredients(p1)
+                binding.tvServings.text = String.format(getString(R.string.number_of_servings), p1)
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?) {
+                Log.d("!!!", "Started tracking touch")
+            }
+
+            override fun onStopTrackingTouch(p0: SeekBar?) {
+                Log.d("!!!", "Stopped tracking touch")
+            }
+
+        })
+
+
     }
 
     override fun onDestroyView() {
@@ -77,7 +103,7 @@ class RecipeFragment : Fragment() {
     private fun getImageFromAssets(imageUrl: String): Drawable? {
         val drawable =
             try {
-                Drawable.createFromStream(binding.root.context.assets.open(imageUrl), null)
+                Drawable.createFromStream(requireContext().assets.open(imageUrl), null)
             } catch (e: IOException) {
                 Log.e("!!!", "Error loading image from assets", e)
                 e.printStackTrace()
