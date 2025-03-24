@@ -7,9 +7,6 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.maslinka.recipes.databinding.ItemMethodStepBinding
 
 class MethodAdapter(private val dataSet: List<String>) : Adapter<MethodAdapter.MethodViewHolder>() {
-
-    var stepCounter = 1
-
     class MethodViewHolder(val binding: ItemMethodStepBinding) : ViewHolder(binding.root) {
 
     }
@@ -25,7 +22,6 @@ class MethodAdapter(private val dataSet: List<String>) : Adapter<MethodAdapter.M
     }
 
     override fun onBindViewHolder(holder: MethodViewHolder, position: Int) {
-        holder.binding.tvCookingMethodStep.text = "$stepCounter. ${dataSet[position]}"
-        stepCounter++
+        holder.binding.tvCookingMethodStep.text = "${position + 1}. ${dataSet[position]}"
     }
 }
