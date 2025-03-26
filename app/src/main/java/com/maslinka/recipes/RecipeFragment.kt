@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -20,6 +21,7 @@ class RecipeFragment : Fragment() {
     private var _binding: FragmentRecipeBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("binding не инициализировано")
+    private var isFavourite = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,8 +56,18 @@ class RecipeFragment : Fragment() {
         binding.ivRecipeListHeaderImage.contentDescription =
             String.format(getString(R.string.content_description_recipe_item), recipe.title)
         binding.tvRecipeListHeaderTitle.text = recipe.title
+        binding.ibIconHeart.setImageResource(R.drawable.ic_favourites)
         binding.tvServings.text = String.format(getString(R.string.number_of_servings), 1)
         initRecycler(recipe)
+        binding.ibIconHeart.setOnClickListener {
+            isFavourite = !isFavourite
+            if (isFavourite){
+                binding.ibIconHeart.setImageResource(R.drawable.ic_heart)
+            }
+            else{
+                binding.ibIconHeart.setImageResource(R.drawable.ic_favourites)
+            }
+        }
     }
 
     private fun initRecycler(recipe: Recipe) {
