@@ -63,10 +63,11 @@ class RecipeFragment : Fragment() {
             binding.rvIngredients.context,
             LinearLayoutManager.VERTICAL
         )
+        val sizeInDp = resources.getDimensionPixelSize(R.dimen._12dp)
         dividerItemDecoration.apply {
             isLastItemDecorated = false
-            dividerInsetStart = 12
-            dividerInsetEnd = 12
+            dividerInsetStart = sizeInDp
+            dividerInsetEnd = sizeInDp
         }
         val ingredientsAdapter = IngredientsAdapter(recipe.ingredients)
         val methodAdapter = MethodAdapter(recipe.method)

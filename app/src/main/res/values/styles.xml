@@ -63,4 +63,10 @@
         <item name="android:textColor">@color/servingsColor</item>
     </style>
 
+    <style name="StyleSeekBar" parent="TextAppearance.AppCompat">
+        <item name="android:min">1</item>
+        <item name="android:max">5</item>
+        <item name="android:layout_marginBottom">@dimen/_16dp</item>
+    </style>
+
 </resources>

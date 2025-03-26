@@ -65,9 +65,9 @@
                 android:id="@+id/sbServingsNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:min="1"
-                android:max="5"
-                android:layout_marginBottom="@dimen/_16dp"/>
+                android:thumb="@drawable/shape_seek_bar_thumb"
+                style="@style/StyleSeekBar"
+                android:progressDrawable="@drawable/shape_seek_bar_progress"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvIngredients"

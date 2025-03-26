@@ -10,4 +10,6 @@
     <color name="titleOnRecipeFragmentColor">#422952</color>
     <color name="decoratorColor">#F5F5F5</color>
     <color name="servingsColor">#626466</color>
+    <color name="seekBarProgress">#A1A9F9</color>
+
 </resources>

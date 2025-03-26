@@ -1,15 +1,17 @@
 package com.maslinka.recipes
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.maslinka.recipes.databinding.ItemCategoryListBinding
+import java.math.BigDecimal
 
 class IngredientsAdapter(val dataSet: List<Ingredient>) :
     Adapter<IngredientsAdapter.IngredientViewHolder>() {
 
-    private var quantity = 1
+    private var quantity :BigDecimal = BigDecimal(1)
 
     class IngredientViewHolder(val binding: ItemCategoryListBinding) : ViewHolder(binding.root) {
 
@@ -26,12 +28,14 @@ class IngredientsAdapter(val dataSet: List<Ingredient>) :
     }
 
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
-        val amount = (dataSet[position].quantity).toDouble() * quantity
+        val amount = BigDecimal(dataSet[position].quantity) * quantity
+        //stripTrailingZeros() - удаление незначащих нулей
+        //scale() - возвращает кол-во знаков после запятой
         holder.binding.tvIngredientAmount.text =
-            if (amount % 1 == 0.0) {
+            if (amount.stripTrailingZeros().scale() == 0) {
                 "${amount.toInt()} ${dataSet[position].unitOfMeasure}"
             } else {
-                "${amount.toString().format("%.1f")} ${dataSet[position].unitOfMeasure}"
+                "${amount.setScale(1)} ${dataSet[position].unitOfMeasure}"
             }
 
         holder.binding.tvIngredientTitle.text = dataSet[position].description
@@ -39,8 +43,9 @@ class IngredientsAdapter(val dataSet: List<Ingredient>) :
 //            "${amount} ${dataSet[position].unitOfMeasure}"
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateIngredients(progress: Int) {
-        quantity = progress
+        quantity = progress.toBigDecimal()
         notifyDataSetChanged()
     }
 }
