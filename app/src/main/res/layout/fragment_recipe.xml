@@ -39,6 +39,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintWidth_max="@dimen/_242dp"
                 tools:text="рецепт №1" />
+
+            <ImageButton
+                android:id="@+id/ibIconHeart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/content_description_icon_heart"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:src="@drawable/ic_heart"
+                style="@style/HeartButtonStyle"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout

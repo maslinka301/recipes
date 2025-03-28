@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="StyleTitle14" parent="TextAppearance.AppCompat">
         <item name="android:textSize">@dimen/_14sp</item>
@@ -67,6 +67,13 @@
         <item name="android:min">1</item>
         <item name="android:max">5</item>
         <item name="android:layout_marginBottom">@dimen/_16dp</item>
+    </style>
+    
+    <style name="HeartButtonStyle">
+        <item name="android:layout_margin">@dimen/_16dp</item>
+        <item name="android:background">@drawable/ripple</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 
 </resources>
