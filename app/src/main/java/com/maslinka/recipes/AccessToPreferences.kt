@@ -9,20 +9,18 @@ object AccessToPreferences {
         val sharedPrefs =
             context.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE) ?: return
         val strSet = ids.map { it.toString() }.toSet()
-        with(sharedPrefs.edit()) {
-            putStringSet(SAVED_FAVOURITES, strSet)
-            apply()
-        }
+        sharedPrefs.edit().putStringSet(SAVED_FAVOURITES, strSet).apply()
     }
 
     fun getFavourites(context: Context): MutableSet<Int> {
-        //activity?.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE)?.edit()?.clear()?.apply()
-
         val sharedPref = context.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE)
-            ?: return mutableSetOf()
-        val favouritesSet =
-            sharedPref.getStringSet(SAVED_FAVOURITES, mutableSetOf()) ?: return mutableSetOf()
-        val intSet = favouritesSet.mapNotNull { it.toIntOrNull() }.toMutableSet() ?: mutableSetOf()
-        return intSet
+            ?: return HashSet()
+
+        val favouritesSet = sharedPref.getStringSet(SAVED_FAVOURITES, null)
+            ?: return HashSet()
+
+        return favouritesSet
+            .mapNotNull { it.toIntOrNull() }
+            .toCollection(HashSet())
     }
 }
