@@ -15,7 +15,6 @@ import com.maslinka.recipes.Constants.ARG_RECIPE
 import com.maslinka.recipes.STUB.getRecipesByIds
 import com.maslinka.recipes.databinding.FragmentFavouritesBinding
 import java.io.IOException
-import java.io.InputStream
 
 class FavouritesFragment : Fragment() {
 
@@ -44,32 +43,38 @@ class FavouritesFragment : Fragment() {
 
     private fun initUI(){
         binding.ivFavouriteFragmentHeader.setImageDrawable(getImageFromAssets())
+        binding.ivFavouriteFragmentHeader.contentDescription = R.string.content_description_favourites_fragment.toString()
     }
 
     private fun initRecycler() {
         val set = getFavourites(requireContext())
-        val favouriteRecipeList = getRecipesByIds(set)
-        val adapter = RecyclerViewsAdapter(favouriteRecipeList)
-        binding.rvFavourites.adapter = adapter
+        if(set.isEmpty()){
+            binding.rvFavourites.visibility = View.GONE
+            binding.tvFavouriteListIsEmpty.visibility = View.VISIBLE
+        }
+        else{
+            val favouriteRecipeList = getRecipesByIds(set)
+            val adapter = RecyclerViewsAdapter(favouriteRecipeList)
+            binding.rvFavourites.adapter = adapter
 
-//        adapter.setOnItemClickListener(object : RecyclerViewsAdapter.OnItemClickListener{
-//            override fun onItemClick(itemId: Int) {
-//                parentFragmentManager.commit {
-//                    openRecipeByRecipeId(itemId)
-//                }
-//            }
-//        })
+            adapter.setOnItemClickListener(object : RecyclerViewsAdapter.OnItemClickListener{
+                override fun onItemClick(itemId: Int) {
+                    openRecipeByRecipeId(itemId)
+                }
+            })
+        }
+
     }
 
-//    fun openRecipeByRecipeId(recipeId: Int) {
-//        val currRecipe = STUB.getRecipeById(recipeId)
-//        val bundle = bundleOf(ARG_RECIPE to currRecipe)
-//        parentFragmentManager.commit {
-//            replace<RecipeFragment>(R.id.fragmentContainerView, args = bundle)
-//            setReorderingAllowed(true)
-//            addToBackStack(null)
-//        }
-//    }
+    fun openRecipeByRecipeId(recipeId: Int) {
+        val currRecipe = STUB.getRecipeById(recipeId)
+        val bundle = bundleOf(ARG_RECIPE to currRecipe)
+        parentFragmentManager.commit {
+            replace<RecipeFragment>(R.id.fragmentContainerView, args = bundle)
+            setReorderingAllowed(true)
+            addToBackStack(null)
+        }
+    }
 
     private fun getImageFromAssets(): Drawable? {
         val drawable =

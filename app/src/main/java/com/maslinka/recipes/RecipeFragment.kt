@@ -64,7 +64,7 @@ class RecipeFragment : Fragment() {
         initRecycler(recipe)
 
         //Работа с избранным
-        val favouriteSet = getFavourites(requireContext())
+        var favouriteSet = getFavourites(requireContext())
         if (recipe.id in favouriteSet) {
             binding.ibIconHeart.setImageResource(R.drawable.ic_heart)
         } else {
@@ -72,6 +72,7 @@ class RecipeFragment : Fragment() {
         }
 
         binding.ibIconHeart.setOnClickListener {
+            favouriteSet = getFavourites(requireContext())
             if (recipe.id in favouriteSet) {
                 favouriteSet.remove(recipe.id)
                 binding.ibIconHeart.setImageResource(R.drawable.ic_favourites)
