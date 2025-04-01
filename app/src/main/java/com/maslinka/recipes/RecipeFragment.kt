@@ -13,6 +13,8 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.maslinka.recipes.AccessToPreferences.getFavourites
+import com.maslinka.recipes.AccessToPreferences.saveFavourites
 import com.maslinka.recipes.Constants.ARG_RECIPE
 import com.maslinka.recipes.Constants.PREFERENCE_FILE
 import com.maslinka.recipes.Constants.SAVED_FAVOURITES
@@ -62,7 +64,7 @@ class RecipeFragment : Fragment() {
         initRecycler(recipe)
 
         //Работа с избранным
-        val favouriteSet = getFavourites()
+        val favouriteSet = getFavourites(requireContext())
         if (recipe.id in favouriteSet) {
             binding.ibIconHeart.setImageResource(R.drawable.ic_heart)
         } else {
@@ -77,7 +79,7 @@ class RecipeFragment : Fragment() {
                 favouriteSet.add(recipe.id)
                 binding.ibIconHeart.setImageResource(R.drawable.ic_heart)
             }
-            saveFavourites(favouriteSet)
+            saveFavourites(requireContext(),favouriteSet)
         }
     }
 
@@ -136,25 +138,25 @@ class RecipeFragment : Fragment() {
         return drawable
     }
 
-    private fun saveFavourites(ids: Set<Int>) {
-        val sharedPrefs =
-            activity?.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE) ?: return
-        val strSet = ids.map { it.toString() }.toSet()
-        with(sharedPrefs.edit()) {
-            putStringSet(SAVED_FAVOURITES, strSet)
-            apply()
-        }
-    }
-
-    private fun getFavourites(): MutableSet<Int> {
-        //activity?.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE)?.edit()?.clear()?.apply()
-
-        val sharedPref = activity?.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE)
-            ?: return mutableSetOf()
-        val favouritesSet =
-            sharedPref.getStringSet(SAVED_FAVOURITES, mutableSetOf()) ?: return mutableSetOf()
-        val intSet = favouritesSet.mapNotNull { it.toIntOrNull() }.toMutableSet() ?: mutableSetOf()
-        return intSet
-    }
+//    fun saveFavourites(ids: Set<Int>) {
+//        val sharedPrefs =
+//            activity?.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE) ?: return
+//        val strSet = ids.map { it.toString() }.toSet()
+//        with(sharedPrefs.edit()) {
+//            putStringSet(SAVED_FAVOURITES, strSet)
+//            apply()
+//        }
+//    }
+//
+//    fun getFavourites(): MutableSet<Int> {
+//        //activity?.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE)?.edit()?.clear()?.apply()
+//
+//        val sharedPref = activity?.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE)
+//            ?: return mutableSetOf()
+//        val favouritesSet =
+//            sharedPref.getStringSet(SAVED_FAVOURITES, mutableSetOf()) ?: return mutableSetOf()
+//        val intSet = favouritesSet.mapNotNull { it.toIntOrNull() }.toMutableSet() ?: mutableSetOf()
+//        return intSet
+//    }
 
 }

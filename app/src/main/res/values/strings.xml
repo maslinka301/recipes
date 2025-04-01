@@ -10,4 +10,5 @@
     <string name="ingredients_list_title">ингредиенты</string>
     <string name="cooking_method">способ приготовления</string>
     <string name="content_description_icon_heart">Add to favourites</string>
+    <string name="favourite_text">избранное</string>
 </resources>
