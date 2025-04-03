@@ -1,4 +1,4 @@
-package com.maslinka.recipes
+package com.maslinka.recipes.ui.categories
 
 import android.graphics.drawable.Drawable
 import android.util.Log
@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.ItemCategoryBinding
 import com.maslinka.recipes.databinding.ItemRecipeBinding
+import com.maslinka.recipes.model.Category
+import com.maslinka.recipes.model.Recipe
 import java.io.IOException
 
 class RecyclerViewsAdapter(private val dataSet: List<Any>) : RecyclerView.Adapter<ViewHolder>() {

@@ -1,4 +1,4 @@
-package com.maslinka.recipes
+package com.maslinka.recipes.ui.categories
 
 import android.graphics.drawable.Drawable
 import android.util.Log
@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.ItemCategoryBinding
+import com.maslinka.recipes.model.Category
 import java.io.IOException
 
 

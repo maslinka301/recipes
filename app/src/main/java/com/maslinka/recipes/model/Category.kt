@@ -1,4 +1,4 @@
-package com.maslinka.recipes
+package com.maslinka.recipes.model
 
 data class Category(
     val id: Int,

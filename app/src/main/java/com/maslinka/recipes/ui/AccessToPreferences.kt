@@ -1,8 +1,8 @@
-package com.maslinka.recipes
+package com.maslinka.recipes.ui
 
 import android.content.Context
-import com.maslinka.recipes.Constants.PREFERENCE_FILE
-import com.maslinka.recipes.Constants.SAVED_FAVOURITES
+import com.maslinka.recipes.ui.Constants.PREFERENCE_FILE
+import com.maslinka.recipes.ui.Constants.SAVED_FAVOURITES
 
 object AccessToPreferences {
     fun saveFavourites(context: Context, ids: Set<Int>) {

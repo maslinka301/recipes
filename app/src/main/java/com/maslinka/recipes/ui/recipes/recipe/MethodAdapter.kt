@@ -1,4 +1,4 @@
-package com.maslinka.recipes
+package com.maslinka.recipes.ui.recipes.recipe
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

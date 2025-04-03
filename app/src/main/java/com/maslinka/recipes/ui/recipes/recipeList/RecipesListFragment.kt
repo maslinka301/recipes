@@ -1,4 +1,4 @@
-package com.maslinka.recipes
+package com.maslinka.recipes.ui.recipes.recipeList
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -10,11 +10,15 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import com.maslinka.recipes.Constants.ARG_CATEGORY_ID
-import com.maslinka.recipes.Constants.ARG_CATEGORY_IMAGE_URL
-import com.maslinka.recipes.Constants.ARG_CATEGORY_NAME
-import com.maslinka.recipes.Constants.ARG_RECIPE
+import com.maslinka.recipes.ui.Constants.ARG_CATEGORY_ID
+import com.maslinka.recipes.ui.Constants.ARG_CATEGORY_IMAGE_URL
+import com.maslinka.recipes.ui.Constants.ARG_CATEGORY_NAME
+import com.maslinka.recipes.ui.Constants.ARG_RECIPE
+import com.maslinka.recipes.R
+import com.maslinka.recipes.data.STUB
 import com.maslinka.recipes.databinding.FragmentListRecipesBinding
+import com.maslinka.recipes.ui.categories.RecyclerViewsAdapter
+import com.maslinka.recipes.ui.recipes.recipe.RecipeFragment
 import java.io.IOException
 
 class RecipesListFragment : Fragment() {

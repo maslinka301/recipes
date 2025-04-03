@@ -1,4 +1,4 @@
-package com.maslinka.recipes
+package com.maslinka.recipes.ui.recipes.favourites
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -10,10 +10,14 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import com.maslinka.recipes.AccessToPreferences.getFavourites
-import com.maslinka.recipes.Constants.ARG_RECIPE
-import com.maslinka.recipes.STUB.getRecipesByIds
+import com.maslinka.recipes.ui.AccessToPreferences.getFavourites
+import com.maslinka.recipes.ui.Constants.ARG_RECIPE
+import com.maslinka.recipes.R
+import com.maslinka.recipes.data.STUB
+import com.maslinka.recipes.data.STUB.getRecipesByIds
 import com.maslinka.recipes.databinding.FragmentFavouritesBinding
+import com.maslinka.recipes.ui.categories.RecyclerViewsAdapter
+import com.maslinka.recipes.ui.recipes.recipe.RecipeFragment
 import java.io.IOException
 
 class FavouritesFragment : Fragment() {
@@ -42,7 +46,7 @@ class FavouritesFragment : Fragment() {
     }
 
     private fun initUI(){
-        binding.ivFavouriteFragmentHeader.setImageDrawable(getImageFromAssets())
+        binding.ivFavouriteFragmentHeader.setImageDrawable(getImageFromAssets()?: resources.getDrawable(R.drawable.bcg_categories))
         binding.ivFavouriteFragmentHeader.contentDescription = R.string.content_description_favourites_fragment.toString()
     }
 
@@ -66,7 +70,7 @@ class FavouritesFragment : Fragment() {
 
     }
 
-    fun openRecipeByRecipeId(recipeId: Int) {
+    private fun openRecipeByRecipeId(recipeId: Int) {
         val currRecipe = STUB.getRecipeById(recipeId)
         val bundle = bundleOf(ARG_RECIPE to currRecipe)
         parentFragmentManager.commit {

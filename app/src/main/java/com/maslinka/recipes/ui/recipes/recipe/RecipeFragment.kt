@@ -1,6 +1,5 @@
-package com.maslinka.recipes
+package com.maslinka.recipes.ui.recipes.recipe
 
-import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -9,16 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import com.maslinka.recipes.AccessToPreferences.getFavourites
-import com.maslinka.recipes.AccessToPreferences.saveFavourites
-import com.maslinka.recipes.Constants.ARG_RECIPE
-import com.maslinka.recipes.Constants.PREFERENCE_FILE
-import com.maslinka.recipes.Constants.SAVED_FAVOURITES
+import com.maslinka.recipes.ui.AccessToPreferences.getFavourites
+import com.maslinka.recipes.ui.AccessToPreferences.saveFavourites
+import com.maslinka.recipes.ui.Constants.ARG_RECIPE
+import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.FragmentRecipeBinding
+import com.maslinka.recipes.model.Recipe
 import java.io.IOException
 
 
