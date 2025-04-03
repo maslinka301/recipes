@@ -29,6 +29,14 @@ object STUB {
         return burgerRecipes[recipeId]
     }
 
+    fun getRecipesByIds(ids: Set<Int>): List<Recipe> {
+        val recipes : MutableList<Recipe> = mutableListOf()
+        ids.forEach {
+            recipes.add(getRecipeById(it))
+        }
+        return recipes
+    }
+
 
     private val burgerRecipes = listOf(
         Recipe(
