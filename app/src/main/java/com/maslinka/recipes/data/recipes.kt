@@ -1,4 +1,8 @@
-package com.maslinka.recipes
+package com.maslinka.recipes.data
+
+import com.maslinka.recipes.model.Category
+import com.maslinka.recipes.model.Ingredient
+import com.maslinka.recipes.model.Recipe
 
 object STUB {
     private val categories = listOf<Category>(

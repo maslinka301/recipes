@@ -1,4 +1,4 @@
-package com.maslinka.recipes
+package com.maslinka.recipes.ui
 
 object Constants {
     const val ARG_CATEGORY_ID = "ARG_CATEGORY_ID"

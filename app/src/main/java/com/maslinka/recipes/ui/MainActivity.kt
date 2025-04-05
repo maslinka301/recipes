@@ -1,4 +1,4 @@
-package com.maslinka.recipes
+package com.maslinka.recipes.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,7 +6,8 @@ import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.maslinka.recipes.databinding.ActivityMainBinding
-import com.maslinka.recipes.CategoriesListFragment as CategoriesListFragment
+import com.maslinka.recipes.ui.recipes.favourites.FavouritesFragment
+import com.maslinka.recipes.ui.categories.CategoriesListFragment
 
 class MainActivity : AppCompatActivity() {
 

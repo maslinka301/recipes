@@ -1,4 +1,4 @@
-package com.maslinka.recipes
+package com.maslinka.recipes.ui.recipes.recipe
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.maslinka.recipes.databinding.ItemCategoryListBinding
+import com.maslinka.recipes.model.Ingredient
 import java.math.BigDecimal
 
 class IngredientsAdapter(val dataSet: List<Ingredient>) :

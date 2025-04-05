@@ -1,4 +1,4 @@
-package com.maslinka.recipes
+package com.maslinka.recipes.ui.categories
 
 import android.os.Bundle
 import android.util.Log
@@ -9,10 +9,13 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import com.maslinka.recipes.Constants.ARG_CATEGORY_ID
-import com.maslinka.recipes.Constants.ARG_CATEGORY_IMAGE_URL
-import com.maslinka.recipes.Constants.ARG_CATEGORY_NAME
+import com.maslinka.recipes.ui.Constants.ARG_CATEGORY_ID
+import com.maslinka.recipes.ui.Constants.ARG_CATEGORY_IMAGE_URL
+import com.maslinka.recipes.ui.Constants.ARG_CATEGORY_NAME
+import com.maslinka.recipes.R
+import com.maslinka.recipes.data.STUB
 import com.maslinka.recipes.databinding.FragmentListCategoriesBinding
+import com.maslinka.recipes.ui.recipes.recipeList.RecipesListFragment
 
 class CategoriesListFragment : Fragment() {
 
