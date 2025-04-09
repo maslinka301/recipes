@@ -19,12 +19,12 @@ class RecipeViewModel: ViewModel() {
     //используется backing property
     //mutableCurrentRecipeState - для внутреннего использования
     //currentRecipeState - для внешних наблюдателей
-    private val mutableCurrentRecipeState = MutableLiveData<RecipeState>()
-    val currentRecipeState :LiveData<RecipeState>
-        get() = mutableCurrentRecipeState
+    private val _recipeState = MutableLiveData<RecipeState>()
+    val recipeState :LiveData<RecipeState>
+        get() = _recipeState
 
     init {
         Log.i("!!!", "ViewModel init")
-        mutableCurrentRecipeState.value = RecipeState(isFavourite = true)
+        _recipeState.value = RecipeState(isFavourite = true)
     }
 }
