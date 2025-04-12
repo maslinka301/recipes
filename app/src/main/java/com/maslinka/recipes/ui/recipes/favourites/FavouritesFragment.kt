@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -46,7 +47,7 @@ class FavouritesFragment : Fragment() {
     }
 
     private fun initUI(){
-        binding.ivFavouriteFragmentHeader.setImageDrawable(getImageFromAssets()?: resources.getDrawable(R.drawable.bcg_categories))
+        binding.ivFavouriteFragmentHeader.setImageDrawable(getImageFromAssets()?: ContextCompat.getDrawable(requireContext(), R.drawable.bcg_categories))
         binding.ivFavouriteFragmentHeader.contentDescription = R.string.content_description_favourites_fragment.toString()
     }
 
