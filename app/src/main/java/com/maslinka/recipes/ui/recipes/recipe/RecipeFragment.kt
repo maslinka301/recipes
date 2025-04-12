@@ -12,8 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import com.maslinka.recipes.ui.AccessToPreferences.getFavourites
-import com.maslinka.recipes.ui.AccessToPreferences.saveFavourites
 import com.maslinka.recipes.ui.Constants.ARG_RECIPE
 import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.FragmentRecipeBinding
@@ -25,6 +23,7 @@ class RecipeFragment : Fragment() {
     private var _binding: FragmentRecipeBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("binding не инициализировано")
+
     private val recipeViewModel: RecipeViewModel by viewModels()
 
     override fun onCreateView(
@@ -60,31 +59,27 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initUI(recipe: Recipe) {
+        recipeViewModel.loadRecipe(recipe.id)
         binding.ivRecipeListHeaderImage.setImageDrawable(getImageFromAssets(recipe.imageUrl))
         binding.ivRecipeListHeaderImage.contentDescription =
             String.format(getString(R.string.content_description_recipe_item), recipe.title)
-        binding.tvRecipeListHeaderTitle.text = recipe.title
-        binding.tvServings.text = String.format(getString(R.string.number_of_servings), 1)
+        //binding.tvRecipeListHeaderTitle.text = recipe.title
+        //binding.tvServings.text = String.format(getString(R.string.number_of_servings), 1)
         initRecycler(recipe)
 
-        //Работа с избранным
-        var favouriteSet = getFavourites(requireContext())
-        if (recipe.id in favouriteSet) {
-            binding.ibIconHeart.setImageResource(R.drawable.ic_heart)
-        } else {
-            binding.ibIconHeart.setImageResource(R.drawable.ic_favourites)
+        recipeViewModel.recipeState.observe(viewLifecycleOwner){ state ->
+            binding.tvRecipeListHeaderTitle.text = state.recipe?.title ?: ""
+            binding.tvServings.text = String.format(getString(R.string.number_of_servings), state.numberOfServings)
+            if (state.isFavourite){
+                binding.ibIconHeart.setImageResource(R.drawable.ic_favourites)
+            }
+            else{
+                binding.ibIconHeart.setImageResource(R.drawable.ic_heart)
+            }
         }
 
         binding.ibIconHeart.setOnClickListener {
-            favouriteSet = getFavourites(requireContext())
-            if (recipe.id in favouriteSet) {
-                favouriteSet.remove(recipe.id)
-                binding.ibIconHeart.setImageResource(R.drawable.ic_favourites)
-            } else {
-                favouriteSet.add(recipe.id)
-                binding.ibIconHeart.setImageResource(R.drawable.ic_heart)
-            }
-            saveFavourites(requireContext(),favouriteSet)
+            recipeViewModel.onFavoritesClicked(recipe.id)
         }
     }
 
@@ -142,26 +137,4 @@ class RecipeFragment : Fragment() {
             }
         return drawable
     }
-
-//    fun saveFavourites(ids: Set<Int>) {
-//        val sharedPrefs =
-//            activity?.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE) ?: return
-//        val strSet = ids.map { it.toString() }.toSet()
-//        with(sharedPrefs.edit()) {
-//            putStringSet(SAVED_FAVOURITES, strSet)
-//            apply()
-//        }
-//    }
-//
-//    fun getFavourites(): MutableSet<Int> {
-//        //activity?.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE)?.edit()?.clear()?.apply()
-//
-//        val sharedPref = activity?.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE)
-//            ?: return mutableSetOf()
-//        val favouritesSet =
-//            sharedPref.getStringSet(SAVED_FAVOURITES, mutableSetOf()) ?: return mutableSetOf()
-//        val intSet = favouritesSet.mapNotNull { it.toIntOrNull() }.toMutableSet() ?: mutableSetOf()
-//        return intSet
-//    }
-
 }
