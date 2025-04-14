@@ -42,8 +42,11 @@ class RecipeViewModel(
     fun loadRecipe(recipeId: Int){
         //TODO load from network
         val listOfFavourites = getFavourites(appContext)
-
         _recipeState.value = RecipeState(STUB.getRecipeById(recipeId), isFavourite = recipeId in listOfFavourites)
+    }
+
+    fun updateServings(servings: Int){
+        _recipeState.value = _recipeState.value?.copy(numberOfServings = servings)
     }
 
     fun onFavoritesClicked(recipeId: Int){

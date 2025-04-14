@@ -1,7 +1,6 @@
 package com.maslinka.recipes.ui.recipes.recipe
 
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,10 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import com.maslinka.recipes.ui.Constants.ARG_RECIPE
 import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.FragmentRecipeBinding
 import com.maslinka.recipes.model.Recipe
+import com.maslinka.recipes.ui.Constants.ARG_RECIPE_ID
 import java.io.IOException
 
 
@@ -39,47 +38,33 @@ class RecipeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initBundleData()
-
-        recipeViewModel.recipeState.observe(viewLifecycleOwner){ state ->
-            Log.i("!!!", "Избранное: ${state.isFavourite}")
-        }
     }
 
     private fun initBundleData() {
-        arguments?.let { arguments ->
-            val currRecipe: Recipe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                arguments.getParcelable(ARG_RECIPE, Recipe::class.java)
-                    ?: throw IllegalArgumentException("Recipe not found in arguments")
-            } else {
-                arguments.getParcelable(ARG_RECIPE)
-                    ?: throw IllegalArgumentException("Recipe not found in arguments")
-            }
-            initUI(currRecipe)
-        } ?: throw IllegalStateException("Arguments are null")
+        val recipeId = arguments?.getInt(ARG_RECIPE_ID) ?: throw IllegalStateException("Arguments are null")
+        initUI(recipeId)
     }
 
-    private fun initUI(recipe: Recipe) {
-        recipeViewModel.loadRecipe(recipe.id)
-        binding.ivRecipeListHeaderImage.setImageDrawable(getImageFromAssets(recipe.imageUrl))
+    private fun initUI(recipeId: Int) {
+        recipeViewModel.loadRecipe(recipeId)
+        binding.ivRecipeListHeaderImage.setImageDrawable(getImageFromAssets(recipeViewModel.recipeState.value?.recipe?.imageUrl ?: throw IllegalStateException("Image is not found")))
         binding.ivRecipeListHeaderImage.contentDescription =
-            String.format(getString(R.string.content_description_recipe_item), recipe.title)
-        //binding.tvRecipeListHeaderTitle.text = recipe.title
-        //binding.tvServings.text = String.format(getString(R.string.number_of_servings), 1)
-        initRecycler(recipe)
+            String.format(getString(R.string.content_description_recipe_item), recipeViewModel.recipeState.value?.recipe?.title)
+        initRecycler(recipeViewModel.recipeState.value?.recipe ?: throw IllegalStateException("Recipe is null"))
 
         recipeViewModel.recipeState.observe(viewLifecycleOwner){ state ->
             binding.tvRecipeListHeaderTitle.text = state.recipe?.title ?: ""
             binding.tvServings.text = String.format(getString(R.string.number_of_servings), state.numberOfServings)
-            if (state.isFavourite){
-                binding.ibIconHeart.setImageResource(R.drawable.ic_favourites)
-            }
-            else{
-                binding.ibIconHeart.setImageResource(R.drawable.ic_heart)
-            }
+            (binding.rvIngredients.adapter as IngredientsAdapter).updateIngredients(state.numberOfServings)
+
+            binding.ibIconHeart.setImageResource(
+                if(state.isFavourite) R.drawable.ic_heart
+                else R.drawable.ic_favourites
+            )
         }
 
         binding.ibIconHeart.setOnClickListener {
-            recipeViewModel.onFavoritesClicked(recipe.id)
+            recipeViewModel.onFavoritesClicked(recipeId)
         }
     }
 
@@ -104,8 +89,7 @@ class RecipeFragment : Fragment() {
         binding.sbServingsNumber.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                ingredientsAdapter.updateIngredients(p1)
-                binding.tvServings.text = String.format(getString(R.string.number_of_servings), p1)
+                recipeViewModel.updateServings(p1)
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
