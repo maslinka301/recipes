@@ -25,7 +25,6 @@ class RecipeViewModel(
         val numberOfServings: Int = 1,
         val isFavourite: Boolean = false,
         val recipeDrawable: Drawable? = null,
-        val recipeImage: String? = null,
     )
 
 
@@ -47,8 +46,7 @@ class RecipeViewModel(
         _recipeState.value = RecipeState(
             recipe = STUB.getRecipeById(recipeId),
             isFavourite = recipeId in listOfFavourites,
-            recipeDrawable = getImageFromAssets(STUB.getRecipeById(recipeId).imageUrl) ?: throw IllegalStateException("Image is not found"),
-            recipeImage = STUB.getRecipeById(recipeId).imageUrl)
+            recipeDrawable = getImageFromAssets(STUB.getRecipeById(recipeId).imageUrl) ?: throw IllegalStateException("Image is not found"),)
         //Не оч понятно, почему не работает закомменченый код, вылетает ошибка IllegalStateException: Recipe is null при попытке вызвать initRecycler во фрагменте
         //ведь мы в первую очередь в initUI вызываем метод loadRecipe и устанавливаем значение рецепта
 //        _recipeState.value = _recipeState.value?.copy(
