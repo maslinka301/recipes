@@ -1,13 +1,24 @@
 package com.maslinka.recipes.ui.recipes.recipe
 
+import android.app.Application
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.maslinka.recipes.data.STUB
 import com.maslinka.recipes.model.Recipe
+import com.maslinka.recipes.ui.AccessToPreferences.getFavourites
+import com.maslinka.recipes.ui.AccessToPreferences.saveFavourites
 
-class RecipeViewModel: ViewModel() {
+
+class RecipeViewModel(
+    application: Application,
+): AndroidViewModel(application) {
+
+    private val appContext: Context = application.applicationContext
+
     data class RecipeState(
         val recipe: Recipe? = null,
         val numberOfServings: Int = 1,
@@ -25,6 +36,30 @@ class RecipeViewModel: ViewModel() {
 
     init {
         Log.i("!!!", "ViewModel init")
-        _recipeState.value = RecipeState(isFavourite = true)
+        //loadRecipe(recipe.id)
     }
+
+    fun loadRecipe(recipeId: Int){
+        //TODO load from network
+        val listOfFavourites = getFavourites(appContext)
+        _recipeState.value = RecipeState(STUB.getRecipeById(recipeId), isFavourite = recipeId in listOfFavourites)
+    }
+
+    fun updateServings(servings: Int){
+        _recipeState.value = _recipeState.value?.copy(numberOfServings = servings)
+    }
+
+    fun onFavoritesClicked(recipeId: Int){
+        val favouriteSet = getFavourites(appContext)
+        val currentState = _recipeState.value ?: return
+        if (recipeId in favouriteSet) {
+            favouriteSet.remove(recipeId)
+            _recipeState.value = currentState.copy(isFavourite = false)
+        } else {
+            favouriteSet.add(recipeId)
+            _recipeState.value = currentState.copy(isFavourite = true)
+        }
+        saveFavourites(appContext,favouriteSet)
+    }
+
 }

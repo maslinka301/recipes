@@ -17,6 +17,7 @@ import com.maslinka.recipes.ui.Constants.ARG_RECIPE
 import com.maslinka.recipes.R
 import com.maslinka.recipes.data.STUB
 import com.maslinka.recipes.databinding.FragmentListRecipesBinding
+import com.maslinka.recipes.ui.Constants.ARG_RECIPE_ID
 import com.maslinka.recipes.ui.categories.RecyclerViewsAdapter
 import com.maslinka.recipes.ui.recipes.recipe.RecipeFragment
 import java.io.IOException
@@ -87,8 +88,8 @@ class RecipesListFragment : Fragment() {
     }
 
     fun openRecipeByRecipeId(recipeId: Int) {
-        val currRecipe = STUB.getRecipeById(recipeId)
-        val bundle = bundleOf(ARG_RECIPE to currRecipe)
+        //val currRecipe = STUB.getRecipeById(recipeId)
+        val bundle = bundleOf(ARG_RECIPE_ID to recipeId)
         parentFragmentManager.commit {
             replace<RecipeFragment>(R.id.fragmentContainerView, args = bundle)
             setReorderingAllowed(true)
