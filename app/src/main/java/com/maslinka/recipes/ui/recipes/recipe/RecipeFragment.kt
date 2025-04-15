@@ -47,7 +47,7 @@ class RecipeFragment : Fragment() {
 
     private fun initUI(recipeId: Int) {
         recipeViewModel.loadRecipe(recipeId)
-        binding.ivRecipeListHeaderImage.setImageDrawable(getImageFromAssets(recipeViewModel.recipeState.value?.recipe?.imageUrl ?: throw IllegalStateException("Image is not found")))
+        //binding.ivRecipeListHeaderImage.setImageDrawable(getImageFromAssets(recipeViewModel.recipeState.value?.recipe?.imageUrl ?: throw IllegalStateException("Image is not found")))
         binding.ivRecipeListHeaderImage.contentDescription =
             String.format(getString(R.string.content_description_recipe_item), recipeViewModel.recipeState.value?.recipe?.title)
         initRecycler(recipeViewModel.recipeState.value?.recipe ?: throw IllegalStateException("Recipe is null"))
@@ -61,6 +61,8 @@ class RecipeFragment : Fragment() {
                 if(state.isFavourite) R.drawable.ic_heart
                 else R.drawable.ic_favourites
             )
+            binding.ivRecipeListHeaderImage.setImageDrawable(state.recipeDrawable)
+
         }
 
         binding.ibIconHeart.setOnClickListener {
@@ -108,17 +110,5 @@ class RecipeFragment : Fragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-    }
-
-    private fun getImageFromAssets(imageUrl: String): Drawable? {
-        val drawable =
-            try {
-                Drawable.createFromStream(requireContext().assets.open(imageUrl), null)
-            } catch (e: IOException) {
-                Log.e("!!!", "Error loading image from assets", e)
-                e.printStackTrace()
-                null
-            }
-        return drawable
     }
 }

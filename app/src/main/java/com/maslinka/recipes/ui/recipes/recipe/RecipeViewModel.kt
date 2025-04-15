@@ -11,6 +11,7 @@ import com.maslinka.recipes.data.STUB
 import com.maslinka.recipes.model.Recipe
 import com.maslinka.recipes.ui.AccessToPreferences.getFavourites
 import com.maslinka.recipes.ui.AccessToPreferences.saveFavourites
+import java.io.IOException
 
 
 class RecipeViewModel(
@@ -24,6 +25,7 @@ class RecipeViewModel(
         val numberOfServings: Int = 1,
         val isFavourite: Boolean = false,
         val recipeDrawable: Drawable? = null,
+        val recipeImage: String? = null,
     )
 
 
@@ -42,7 +44,18 @@ class RecipeViewModel(
     fun loadRecipe(recipeId: Int){
         //TODO load from network
         val listOfFavourites = getFavourites(appContext)
-        _recipeState.value = RecipeState(STUB.getRecipeById(recipeId), isFavourite = recipeId in listOfFavourites)
+        _recipeState.value = RecipeState(
+            recipe = STUB.getRecipeById(recipeId),
+            isFavourite = recipeId in listOfFavourites,
+            recipeDrawable = getImageFromAssets(STUB.getRecipeById(recipeId).imageUrl) ?: throw IllegalStateException("Image is not found"),
+            recipeImage = STUB.getRecipeById(recipeId).imageUrl)
+        //Не оч понятно, почему не работает закомменченый код, вылетает ошибка IllegalStateException: Recipe is null при попытке вызвать initRecycler во фрагменте
+        //ведь мы в первую очередь в initUI вызываем метод loadRecipe и устанавливаем значение рецепта
+//        _recipeState.value = _recipeState.value?.copy(
+//            recipe = STUB.getRecipeById(recipeId),
+//            isFavourite = recipeId in listOfFavourites,
+//            recipeDrawable = getImageFromAssets(STUB.getRecipeById(recipeId).imageUrl) ?: throw IllegalStateException("Image is not found"),
+//            recipeImage = STUB.getRecipeById(recipeId).imageUrl)
     }
 
     fun updateServings(servings: Int){
@@ -60,6 +73,18 @@ class RecipeViewModel(
             _recipeState.value = currentState.copy(isFavourite = true)
         }
         saveFavourites(appContext,favouriteSet)
+    }
+
+    private fun getImageFromAssets(imageUrl: String): Drawable? {
+        val drawable =
+            try {
+                Drawable.createFromStream(appContext.assets.open(imageUrl), null)
+            } catch (e: IOException) {
+                Log.e("!!!", "Error loading image from assets", e)
+                e.printStackTrace()
+                null
+            }
+        return drawable
     }
 
 }
