@@ -16,7 +16,7 @@ import java.io.IOException
 
 class RecipeViewModel(
     application: Application,
-): AndroidViewModel(application) {
+) : AndroidViewModel(application) {
 
     private val appContext: Context = application.applicationContext
 
@@ -32,7 +32,7 @@ class RecipeViewModel(
     //mutableCurrentRecipeState - для внутреннего использования
     //currentRecipeState - для внешних наблюдателей
     private val _recipeState = MutableLiveData<RecipeState>()
-    val recipeState :LiveData<RecipeState>
+    val recipeState: LiveData<RecipeState>
         get() = _recipeState
 
     init {
@@ -40,27 +40,30 @@ class RecipeViewModel(
         //loadRecipe(recipe.id)
     }
 
-    fun loadRecipe(recipeId: Int){
+    fun loadRecipe(recipeId: Int) {
         //TODO load from network
-        val listOfFavourites = getFavourites(appContext)
-        _recipeState.value = RecipeState(
-            recipe = STUB.getRecipeById(recipeId),
-            isFavourite = recipeId in listOfFavourites,
-            recipeDrawable = getImageFromAssets(STUB.getRecipeById(recipeId).imageUrl) ?: throw IllegalStateException("Image is not found"),)
-        //Не оч понятно, почему не работает закомменченый код, вылетает ошибка IllegalStateException: Recipe is null при попытке вызвать initRecycler во фрагменте
-        //ведь мы в первую очередь в initUI вызываем метод loadRecipe и устанавливаем значение рецепта
-//        _recipeState.value = _recipeState.value?.copy(
-//            recipe = STUB.getRecipeById(recipeId),
-//            isFavourite = recipeId in listOfFavourites,
-//            recipeDrawable = getImageFromAssets(STUB.getRecipeById(recipeId).imageUrl) ?: throw IllegalStateException("Image is not found"),
-//            recipeImage = STUB.getRecipeById(recipeId).imageUrl)
+        val recipe = STUB.getRecipeById(recipeId)
+        val isFavourite = recipeId in getFavourites(appContext)
+        val recipeDrawable =
+            getImageFromAssets(recipe.imageUrl) ?: throw IllegalStateException("Image is not found")
+
+        _recipeState.value = _recipeState.value?.copy(
+            recipe = recipe,
+            isFavourite = isFavourite,
+            recipeDrawable = recipeDrawable
+        ) ?: RecipeState(
+            recipe = recipe,
+            isFavourite = isFavourite,
+            recipeDrawable = recipeDrawable
+        )
+        Log.i("!!!", "Рецепт с id $recipeId загружен")
     }
 
-    fun updateServings(servings: Int){
+    fun updateServings(servings: Int) {
         _recipeState.value = _recipeState.value?.copy(numberOfServings = servings)
     }
 
-    fun onFavoritesClicked(recipeId: Int){
+    fun onFavoritesClicked(recipeId: Int) {
         val favouriteSet = getFavourites(appContext)
         val currentState = _recipeState.value ?: return
         if (recipeId in favouriteSet) {
@@ -70,7 +73,7 @@ class RecipeViewModel(
             favouriteSet.add(recipeId)
             _recipeState.value = currentState.copy(isFavourite = true)
         }
-        saveFavourites(appContext,favouriteSet)
+        saveFavourites(appContext, favouriteSet)
     }
 
     private fun getImageFromAssets(imageUrl: String): Drawable? {
