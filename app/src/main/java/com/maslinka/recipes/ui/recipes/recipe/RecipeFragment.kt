@@ -57,10 +57,10 @@ class RecipeFragment : Fragment() {
 
     private fun setupObserver() {
         recipeViewModel.recipeState.observe(viewLifecycleOwner) { state ->
+            updateRecycler(state)
             updateRecipeInfo(state)
             updateServings(state)
             updateIconHeartImage(state)
-            updateRecycler(state)
         }
     }
 
