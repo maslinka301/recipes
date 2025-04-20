@@ -1,6 +1,6 @@
 package com.maslinka.recipes.ui.recipes.recipe
 
-import android.graphics.drawable.Drawable
+
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,9 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.FragmentRecipeBinding
-import com.maslinka.recipes.model.Recipe
+import com.maslinka.recipes.model.Ingredient
 import com.maslinka.recipes.ui.Constants.ARG_RECIPE_ID
-import java.io.IOException
 
 
 class RecipeFragment : Fragment() {
@@ -41,34 +40,74 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initBundleData() {
-        val recipeId = arguments?.getInt(ARG_RECIPE_ID) ?: throw IllegalStateException("Arguments are null")
+        val recipeId =
+            arguments?.getInt(ARG_RECIPE_ID) ?: throw IllegalStateException("Arguments are null")
         initUI(recipeId)
     }
 
     private fun initUI(recipeId: Int) {
+        loadRecipeToVM(recipeId)
+        setupObserver()
+        setIconHeartListener(recipeId)
+    }
+
+    private fun loadRecipeToVM(recipeId: Int) {
         recipeViewModel.loadRecipe(recipeId)
-        binding.ivRecipeListHeaderImage.setImageDrawable(getImageFromAssets(recipeViewModel.recipeState.value?.recipe?.imageUrl ?: throw IllegalStateException("Image is not found")))
-        binding.ivRecipeListHeaderImage.contentDescription =
-            String.format(getString(R.string.content_description_recipe_item), recipeViewModel.recipeState.value?.recipe?.title)
-        initRecycler(recipeViewModel.recipeState.value?.recipe ?: throw IllegalStateException("Recipe is null"))
+    }
 
-        recipeViewModel.recipeState.observe(viewLifecycleOwner){ state ->
-            binding.tvRecipeListHeaderTitle.text = state.recipe?.title ?: ""
-            binding.tvServings.text = String.format(getString(R.string.number_of_servings), state.numberOfServings)
-            (binding.rvIngredients.adapter as IngredientsAdapter).updateIngredients(state.numberOfServings)
+    private fun setupObserver() {
+        recipeViewModel.recipeState.observe(viewLifecycleOwner) { state ->
+            updateRecycler(state)
+            updateRecipeInfo(state)
+            updateServings(state)
+            updateIconHeartImage(state)
+        }
+    }
 
-            binding.ibIconHeart.setImageResource(
-                if(state.isFavourite) R.drawable.ic_heart
-                else R.drawable.ic_favourites
+    private fun updateRecipeInfo(state: RecipeViewModel.RecipeState) {
+        with(binding) {
+            tvRecipeListHeaderTitle.text = state.recipe?.title ?: ""
+            ivRecipeListHeaderImage.contentDescription =
+                String.format(
+                    getString(R.string.content_description_recipe_item),
+                    state.recipe?.title
+                )
+            ivRecipeListHeaderImage.setImageDrawable(
+                state.recipeDrawable
             )
         }
+    }
 
+    private fun updateServings(state: RecipeViewModel.RecipeState) {
+        with(binding) {
+            tvServings.text =
+                String.format(getString(R.string.number_of_servings), state.numberOfServings)
+            (rvIngredients.adapter as IngredientsAdapter).updateIngredients(state.numberOfServings)
+        }
+    }
+
+    private fun updateIconHeartImage(state: RecipeViewModel.RecipeState) {
+        binding.ibIconHeart.setImageResource(
+            if (state.isFavourite) R.drawable.ic_heart
+            else R.drawable.ic_favourites
+        )
+    }
+
+    private fun updateRecycler(state: RecipeViewModel.RecipeState) {
+        state.recipe?.let { initRecycler(it.ingredients, it.method) }
+    }
+
+
+    private fun setIconHeartListener(recipeId: Int) {
         binding.ibIconHeart.setOnClickListener {
             recipeViewModel.onFavoritesClicked(recipeId)
         }
     }
 
-    private fun initRecycler(recipe: Recipe) {
+    private fun initRecycler(
+        ingredientList: List<Ingredient> = emptyList(),
+        methodList: List<String> = emptyList()
+    ) {
         val dividerItemDecoration = MaterialDividerItemDecoration(
             binding.rvIngredients.context,
             LinearLayoutManager.VERTICAL
@@ -79,12 +118,19 @@ class RecipeFragment : Fragment() {
             dividerInsetStart = sizeInDp
             dividerInsetEnd = sizeInDp
         }
-        val ingredientsAdapter = IngredientsAdapter(recipe.ingredients)
-        val methodAdapter = MethodAdapter(recipe.method)
-        binding.rvIngredients.adapter = ingredientsAdapter
-        binding.rvIngredients.addItemDecoration(dividerItemDecoration)
-        binding.rvMethod.adapter = methodAdapter
-        binding.rvMethod.addItemDecoration(dividerItemDecoration)
+        val ingredientsAdapter = IngredientsAdapter(ingredientList)
+        val methodAdapter = MethodAdapter(methodList)
+
+        with(binding) {
+            rvIngredients.apply {
+                adapter = ingredientsAdapter
+                addItemDecoration(dividerItemDecoration)
+            }
+            rvMethod.apply {
+                adapter = methodAdapter
+                addItemDecoration(dividerItemDecoration)
+            }
+        }
 
         binding.sbServingsNumber.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
@@ -101,24 +147,10 @@ class RecipeFragment : Fragment() {
             }
 
         })
-
-
     }
 
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-    }
-
-    private fun getImageFromAssets(imageUrl: String): Drawable? {
-        val drawable =
-            try {
-                Drawable.createFromStream(requireContext().assets.open(imageUrl), null)
-            } catch (e: IOException) {
-                Log.e("!!!", "Error loading image from assets", e)
-                e.printStackTrace()
-                null
-            }
-        return drawable
     }
 }
