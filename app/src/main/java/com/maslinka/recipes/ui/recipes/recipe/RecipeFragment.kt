@@ -2,7 +2,6 @@ package com.maslinka.recipes.ui.recipes.recipe
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +22,9 @@ class RecipeFragment : Fragment() {
         get() = _binding ?: throw IllegalStateException("binding не инициализировано")
 
     private val recipeViewModel: RecipeViewModel by viewModels()
+
+    private  var ingredientsAdapter = IngredientsAdapter(emptyList())
+    private  var methodAdapter = MethodAdapter(emptyList())
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,6 +97,7 @@ class RecipeFragment : Fragment() {
 
     private fun updateRecycler(state: RecipeViewModel.RecipeState) {
         state.recipe?.let { initRecycler(it.ingredients, it.method) }
+        setupSeekBar()
     }
 
 
@@ -103,6 +106,44 @@ class RecipeFragment : Fragment() {
             recipeViewModel.onFavoritesClicked(recipeId)
         }
     }
+
+
+//    private fun setupRecyclerViews() {
+//        val divider = MaterialDividerItemDecoration(
+//            requireContext(),
+//            LinearLayoutManager.VERTICAL
+//        ).apply {
+//            isLastItemDecorated = false
+//            dividerInsetStart = resources.getDimensionPixelSize(R.dimen._12dp)
+//            dividerInsetEnd = resources.getDimensionPixelSize(R.dimen._12dp)
+//        }
+//
+//        with(binding) {
+//            rvIngredients.apply {
+//                adapter = ingredientsAdapter
+//                addItemDecoration(divider)
+//            }
+//            rvMethod.apply {
+//                adapter = methodAdapter
+//                addItemDecoration(divider)
+//            }
+//        }
+//    }
+
+    private fun setupSeekBar() {
+        binding.sbServingsNumber.apply {
+            setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    if (fromUser) {
+                        recipeViewModel.updateServings(progress)
+                    }
+                }
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
+        }
+    }
+
 
     private fun initRecycler(
         ingredientList: List<Ingredient> = emptyList(),
@@ -132,21 +173,21 @@ class RecipeFragment : Fragment() {
             }
         }
 
-        binding.sbServingsNumber.setOnSeekBarChangeListener(object :
-            SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                recipeViewModel.updateServings(p1)
-            }
-
-            override fun onStartTrackingTouch(p0: SeekBar?) {
-                Log.d("!!!", "Started tracking touch")
-            }
-
-            override fun onStopTrackingTouch(p0: SeekBar?) {
-                Log.d("!!!", "Stopped tracking touch")
-            }
-
-        })
+//        binding.sbServingsNumber.setOnSeekBarChangeListener(object :
+//            SeekBar.OnSeekBarChangeListener {
+//            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+//                recipeViewModel.updateServings(p1)
+//            }
+//
+//            override fun onStartTrackingTouch(p0: SeekBar?) {
+//                Log.d("!!!", "Started tracking touch")
+//            }
+//
+//            override fun onStopTrackingTouch(p0: SeekBar?) {
+//                Log.d("!!!", "Stopped tracking touch")
+//            }
+//
+//        })
     }
 
     override fun onDestroyView() {
