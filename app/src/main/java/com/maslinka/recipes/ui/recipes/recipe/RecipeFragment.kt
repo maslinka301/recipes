@@ -23,8 +23,6 @@ class RecipeFragment : Fragment() {
 
     private val recipeViewModel: RecipeViewModel by viewModels()
 
-    private  var ingredientsAdapter = IngredientsAdapter(emptyList())
-    private  var methodAdapter = MethodAdapter(emptyList())
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,6 +48,7 @@ class RecipeFragment : Fragment() {
     private fun initUI(recipeId: Int) {
         loadRecipeToVM(recipeId)
         setupObserver()
+        createRecyclerItemDecorator()
         setIconHeartListener(recipeId)
     }
 
@@ -84,7 +83,7 @@ class RecipeFragment : Fragment() {
         with(binding) {
             tvServings.text =
                 String.format(getString(R.string.number_of_servings), state.numberOfServings)
-            (rvIngredients.adapter as IngredientsAdapter).updateIngredients(state.numberOfServings)
+            (rvIngredients.adapter as? IngredientsAdapter)?.updateIngredients(state.numberOfServings)
         }
     }
 
@@ -96,7 +95,7 @@ class RecipeFragment : Fragment() {
     }
 
     private fun updateRecycler(state: RecipeViewModel.RecipeState) {
-        state.recipe?.let { initRecycler(it.ingredients, it.method) }
+        state.recipe?.let { initRecyclerAdapters(it.ingredients, it.method) }
         setupSeekBar()
     }
 
@@ -107,28 +106,6 @@ class RecipeFragment : Fragment() {
         }
     }
 
-
-//    private fun setupRecyclerViews() {
-//        val divider = MaterialDividerItemDecoration(
-//            requireContext(),
-//            LinearLayoutManager.VERTICAL
-//        ).apply {
-//            isLastItemDecorated = false
-//            dividerInsetStart = resources.getDimensionPixelSize(R.dimen._12dp)
-//            dividerInsetEnd = resources.getDimensionPixelSize(R.dimen._12dp)
-//        }
-//
-//        with(binding) {
-//            rvIngredients.apply {
-//                adapter = ingredientsAdapter
-//                addItemDecoration(divider)
-//            }
-//            rvMethod.apply {
-//                adapter = methodAdapter
-//                addItemDecoration(divider)
-//            }
-//        }
-//    }
 
     private fun setupSeekBar() {
         binding.sbServingsNumber.apply {
@@ -145,10 +122,20 @@ class RecipeFragment : Fragment() {
     }
 
 
-    private fun initRecycler(
+    private fun initRecyclerAdapters(
         ingredientList: List<Ingredient> = emptyList(),
         methodList: List<String> = emptyList()
     ) {
+        val ingredientsAdapter = IngredientsAdapter(ingredientList)
+        val methodAdapter = MethodAdapter(methodList)
+
+        with(binding) {
+            rvIngredients.adapter = ingredientsAdapter
+            rvMethod.adapter = methodAdapter
+        }
+    }
+
+    private fun createRecyclerItemDecorator(){
         val dividerItemDecoration = MaterialDividerItemDecoration(
             binding.rvIngredients.context,
             LinearLayoutManager.VERTICAL
@@ -159,35 +146,10 @@ class RecipeFragment : Fragment() {
             dividerInsetStart = sizeInDp
             dividerInsetEnd = sizeInDp
         }
-        val ingredientsAdapter = IngredientsAdapter(ingredientList)
-        val methodAdapter = MethodAdapter(methodList)
-
         with(binding) {
-            rvIngredients.apply {
-                adapter = ingredientsAdapter
-                addItemDecoration(dividerItemDecoration)
-            }
-            rvMethod.apply {
-                adapter = methodAdapter
-                addItemDecoration(dividerItemDecoration)
-            }
+            rvIngredients.addItemDecoration(dividerItemDecoration)
+            rvMethod.addItemDecoration(dividerItemDecoration)
         }
-
-//        binding.sbServingsNumber.setOnSeekBarChangeListener(object :
-//            SeekBar.OnSeekBarChangeListener {
-//            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-//                recipeViewModel.updateServings(p1)
-//            }
-//
-//            override fun onStartTrackingTouch(p0: SeekBar?) {
-//                Log.d("!!!", "Started tracking touch")
-//            }
-//
-//            override fun onStopTrackingTouch(p0: SeekBar?) {
-//                Log.d("!!!", "Stopped tracking touch")
-//            }
-//
-//        })
     }
 
     override fun onDestroyView() {
