@@ -37,7 +37,6 @@ class RecipeViewModel(
 
     init {
         Log.i("!!!", "ViewModel init")
-        //loadRecipe(recipe.id)
     }
 
     fun loadRecipe(recipeId: Int) {
