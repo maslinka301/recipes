@@ -9,10 +9,18 @@ import com.maslinka.recipes.databinding.ItemCategoryListBinding
 import com.maslinka.recipes.model.Ingredient
 import java.math.BigDecimal
 
-class IngredientsAdapter(val dataSet: List<Ingredient>) :
+class IngredientsAdapter:
     Adapter<IngredientsAdapter.IngredientViewHolder>() {
 
     private var quantity :BigDecimal = BigDecimal(1)
+
+    var dataSet: List<Ingredient> = emptyList()
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
 
     class IngredientViewHolder(val binding: ItemCategoryListBinding) : ViewHolder(binding.root) {
 
@@ -49,4 +57,5 @@ class IngredientsAdapter(val dataSet: List<Ingredient>) :
         quantity = progress.toBigDecimal()
         notifyDataSetChanged()
     }
+
 }

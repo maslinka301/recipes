@@ -1,15 +1,23 @@
 package com.maslinka.recipes.ui.recipes.recipe
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.maslinka.recipes.databinding.ItemMethodStepBinding
+import com.maslinka.recipes.model.Ingredient
 
-class MethodAdapter(private val dataSet: List<String>) : Adapter<MethodAdapter.MethodViewHolder>() {
-    class MethodViewHolder(val binding: ItemMethodStepBinding) : ViewHolder(binding.root) {
+class MethodAdapter : Adapter<MethodAdapter.MethodViewHolder>() {
 
-    }
+    var dataSet: List<String> = emptyList()
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    class MethodViewHolder(val binding: ItemMethodStepBinding) : ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MethodViewHolder {
         val inflater = LayoutInflater.from(parent.context)
