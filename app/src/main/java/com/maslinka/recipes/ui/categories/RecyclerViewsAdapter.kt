@@ -14,7 +14,8 @@ import com.maslinka.recipes.model.Category
 import com.maslinka.recipes.model.Recipe
 import java.io.IOException
 
-class RecyclerViewsAdapter(private val dataSet: List<Any>) : RecyclerView.Adapter<ViewHolder>() {
+class RecyclerViewsAdapter() : RecyclerView.Adapter<ViewHolder>() {
+    var dataSet: List<Any> = emptyList()
 
     companion object {
         const val CATEGORY_TYPE = 1
