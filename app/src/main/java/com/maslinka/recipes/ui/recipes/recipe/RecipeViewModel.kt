@@ -20,14 +20,6 @@ class RecipeViewModel(
 
     private val appContext: Context = application.applicationContext
 
-    data class RecipeState(
-        val recipe: Recipe? = null,
-        val numberOfServings: Int = 1,
-        val isFavourite: Boolean = false,
-        val recipeDrawable: Drawable? = null,
-    )
-
-
     //используется backing property
     //mutableCurrentRecipeState - для внутреннего использования
     //currentRecipeState - для внешних наблюдателей
@@ -46,7 +38,7 @@ class RecipeViewModel(
         val recipeDrawable =
             getImageFromAssets(recipe.imageUrl) ?: throw IllegalStateException("Image is not found")
 
-        _recipeState.value = _recipeState.value?.copy(
+        _recipeState.value = recipeState.value?.copy(
             recipe = recipe,
             isFavourite = isFavourite,
             recipeDrawable = recipeDrawable
@@ -59,7 +51,7 @@ class RecipeViewModel(
     }
 
     fun updateServings(servings: Int) {
-        _recipeState.value = _recipeState.value?.copy(numberOfServings = servings)
+        _recipeState.value = recipeState.value?.copy(numberOfServings = servings)
     }
 
     fun onFavoritesClicked(recipeId: Int) {
@@ -86,5 +78,12 @@ class RecipeViewModel(
             }
         return drawable
     }
+
+    data class RecipeState(
+        val recipe: Recipe? = null,
+        val numberOfServings: Int = 1,
+        val isFavourite: Boolean = false,
+        val recipeDrawable: Drawable? = null,
+    )
 
 }

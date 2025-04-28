@@ -1,5 +1,6 @@
 package com.maslinka.recipes.ui.recipes.recipeList
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,6 +15,11 @@ import java.io.IOException
 class RecipeListAdapter() : Adapter<RecipeListAdapter.RecipeListViewHolder>() {
 
     var dataSet: List<Recipe> = emptyList()
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     class RecipeListViewHolder(val binding: ItemRecipeBinding) : ViewHolder(binding.root)
 

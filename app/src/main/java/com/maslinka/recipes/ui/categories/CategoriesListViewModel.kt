@@ -13,10 +13,6 @@ import com.maslinka.recipes.ui.Constants.ARG_CATEGORY_NAME
 
 class CategoriesListViewModel : ViewModel() {
 
-    data class CategoriesListState(
-        val categoriesList: List<Category> = emptyList(),
-        val navigationData: Bundle? = null
-    )
 
     private val _categoryListState = MutableLiveData<CategoriesListState>()
     val categoryListState: LiveData<CategoriesListState>
@@ -30,7 +26,7 @@ class CategoriesListViewModel : ViewModel() {
 
     fun prepareNavigation(categoryId: Int) {
         val category = STUB.getCategory(categoryId)
-        _categoryListState.value = _categoryListState.value?.copy(
+        _categoryListState.value = categoryListState.value?.copy(
             navigationData = bundleOf(
                 ARG_CATEGORY_ID to category.id,
                 ARG_CATEGORY_NAME to category.title,
@@ -38,4 +34,9 @@ class CategoriesListViewModel : ViewModel() {
             )
         )
     }
+
+    data class CategoriesListState(
+        val categoriesList: List<Category> = emptyList(),
+        val navigationData: Bundle? = null
+    )
 }

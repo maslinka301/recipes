@@ -13,25 +13,13 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
 
     val appContext = application.applicationContext
 
-    data class RecipeListState(
-        val categoryId: Int? = null,
-        val categoryName: String? = null,
-        val categoryImage: Drawable? = null,
-        val recipeList: List<Recipe> = emptyList(),
-    )
-
     private val _recipeListState = MutableLiveData<RecipeListState>()
     val recipeListState: LiveData<RecipeListState>
         get() = _recipeListState
 
-    fun getRecipeList(categoryId: Int) {
-        _recipeListState.value = _recipeListState.value?.copy(
-            recipeList = STUB.getRecipesByCategoryId(categoryId)
-        )
-    }
 
     fun initState(categoryId: Int?, categoryName: String?, categoryImageUrl: String?) {
-        _recipeListState.value = _recipeListState.value?.copy(
+        _recipeListState.value = recipeListState.value?.copy(
             categoryId = categoryId,
             categoryName = categoryName,
             categoryImage = getImageFromAssets(categoryImageUrl),
@@ -41,6 +29,12 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
             categoryImage = getImageFromAssets(categoryImageUrl),
         )
         categoryId?.let { getRecipeList(it) }
+    }
+
+    fun getRecipeList(categoryId: Int) {
+        _recipeListState.value = recipeListState.value?.copy(
+            recipeList = STUB.getRecipesByCategoryId(categoryId)
+        )
     }
 
     private fun getImageFromAssets(categoryImageUrl: String?): Drawable? {
@@ -59,4 +53,11 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
             }
         return drawable
     }
+
+    data class RecipeListState(
+        val categoryId: Int? = null,
+        val categoryName: String? = null,
+        val categoryImage: Drawable? = null,
+        val recipeList: List<Recipe> = emptyList(),
+    )
 }

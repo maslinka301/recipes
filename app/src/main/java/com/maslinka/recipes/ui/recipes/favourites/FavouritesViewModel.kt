@@ -16,19 +16,12 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
 
     private val appContext = application.applicationContext
 
-    data class FavouritesState(
-        val headerImage: Drawable? = null,
-        val contentDescription: Int? = null,
-        val favouritesList: List<Recipe> = emptyList(),
-        val listIsEmpty: Boolean = true,
-    )
-
-
     private val _favouritesState = MutableLiveData<FavouritesState>()
     val favouritesState: LiveData<FavouritesState>
         get() = _favouritesState
 
-    init {
+
+    fun initState(){
         _favouritesState.value = FavouritesState(
             headerImage = getImageFromAssets(),
             contentDescription = R.string.content_description_favourites_fragment,
@@ -38,7 +31,7 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
     fun updateFavouritesList() {
         val favouritesList =
             STUB.getRecipesByIds(AccessToPreferences.getFavourites(appContext.applicationContext))
-        _favouritesState.value = _favouritesState.value?.copy(
+        _favouritesState.value = favouritesState.value?.copy(
             favouritesList = favouritesList,
             listIsEmpty = favouritesList.isEmpty()
         )
@@ -57,4 +50,10 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
     }
 
 
+    data class FavouritesState(
+        val headerImage: Drawable? = null,
+        val contentDescription: Int? = null,
+        val favouritesList: List<Recipe> = emptyList(),
+        val listIsEmpty: Boolean = true,
+    )
 }

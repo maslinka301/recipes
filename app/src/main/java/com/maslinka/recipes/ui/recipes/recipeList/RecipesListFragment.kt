@@ -65,6 +65,11 @@ class RecipesListFragment : Fragment() {
 
     private fun initRecyclerAdapter() {
         binding.rvRecipes.adapter = recipeListAdapter
+        recipeListAdapter.setOnItemClickListener(object : RecyclerViewsAdapter.OnItemClickListener {
+            override fun onItemClick(itemId: Int) {
+                openRecipeByRecipeId(itemId)
+            }
+        })
     }
 
     private fun setupObservers() {
@@ -76,11 +81,6 @@ class RecipesListFragment : Fragment() {
 
     private fun updateRecycler(state: RecipeListViewModel.RecipeListState) {
         recipeListAdapter.dataSet = state.recipeList
-        recipeListAdapter.setOnItemClickListener(object : RecyclerViewsAdapter.OnItemClickListener {
-            override fun onItemClick(itemId: Int) {
-                openRecipeByRecipeId(itemId)
-            }
-        })
     }
 
     fun openRecipeByRecipeId(recipeId: Int) {

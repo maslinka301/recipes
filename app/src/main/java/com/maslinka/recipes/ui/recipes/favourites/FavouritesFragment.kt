@@ -36,6 +36,7 @@ class FavouritesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        favouritesViewModel.initState()
         initUI()
     }
 
@@ -67,6 +68,12 @@ class FavouritesFragment : Fragment() {
 
     private fun initRecyclerAdapter() {
         binding.rvFavourites.adapter = favouritesAdapter
+        favouritesAdapter.setOnItemClickListener(object :
+            RecyclerViewsAdapter.OnItemClickListener {
+            override fun onItemClick(itemId: Int) {
+                openRecipeByRecipeId(itemId)
+            }
+        })
     }
 
     private fun updateRecycler(state: FavouritesViewModel.FavouritesState) {
@@ -77,12 +84,6 @@ class FavouritesFragment : Fragment() {
             }
         } else {
             favouritesAdapter.dataSet = state.favouritesList
-            favouritesAdapter.setOnItemClickListener(object :
-                RecyclerViewsAdapter.OnItemClickListener {
-                override fun onItemClick(itemId: Int) {
-                    openRecipeByRecipeId(itemId)
-                }
-            })
         }
     }
 

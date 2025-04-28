@@ -1,5 +1,6 @@
 package com.maslinka.recipes.ui.categories
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +17,11 @@ import java.io.IOException
 
 class RecyclerViewsAdapter() : RecyclerView.Adapter<ViewHolder>() {
     var dataSet: List<Any> = emptyList()
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     companion object {
         const val CATEGORY_TYPE = 1
