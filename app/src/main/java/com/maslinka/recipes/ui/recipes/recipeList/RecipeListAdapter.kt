@@ -1,5 +1,6 @@
 package com.maslinka.recipes.ui.recipes.recipeList
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,10 +12,16 @@ import com.maslinka.recipes.databinding.ItemRecipeBinding
 import com.maslinka.recipes.model.Recipe
 import java.io.IOException
 
-class RecipeListAdapter(val dataSet: List<Recipe>):Adapter<RecipeListAdapter.RecipeListViewHolder>() {
-    class RecipeListViewHolder(val binding: ItemRecipeBinding) : ViewHolder(binding.root) {
+class RecipeListAdapter() : Adapter<RecipeListAdapter.RecipeListViewHolder>() {
 
-    }
+    var dataSet: List<Recipe> = emptyList()
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    class RecipeListViewHolder(val binding: ItemRecipeBinding) : ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -34,8 +41,7 @@ class RecipeListAdapter(val dataSet: List<Recipe>):Adapter<RecipeListAdapter.Rec
                     holder.binding.root.context.assets.open(dataSet[position].imageUrl),
                     null
                 )
-            }
-            catch (e: IOException){
+            } catch (e: IOException) {
                 Log.e("!!!", "Error loading image from assets", e)
                 e.printStackTrace()
                 null

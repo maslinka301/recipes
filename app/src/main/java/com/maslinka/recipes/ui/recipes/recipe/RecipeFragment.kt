@@ -49,9 +49,9 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initUI(recipeId: Int) {
+        setupObserver()
         loadRecipeToVM(recipeId)
         initRecyclerAdapters()
-        setupObserver()
         createRecyclerItemDecorator()
         setIconHeartListener(recipeId)
     }
