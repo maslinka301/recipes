@@ -6,9 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.maslinka.recipes.ui.Constants.ARG_CATEGORY_ID
 import com.maslinka.recipes.ui.Constants.ARG_CATEGORY_IMAGE_URL
 import com.maslinka.recipes.ui.Constants.ARG_CATEGORY_NAME
@@ -16,7 +15,6 @@ import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.FragmentListRecipesBinding
 import com.maslinka.recipes.ui.Constants.ARG_RECIPE_ID
 import com.maslinka.recipes.ui.categories.RecyclerViewsAdapter
-import com.maslinka.recipes.ui.recipes.recipe.RecipeFragment
 
 class RecipesListFragment : Fragment() {
     private var _binding: FragmentListRecipesBinding? = null
@@ -85,11 +83,12 @@ class RecipesListFragment : Fragment() {
 
     fun openRecipeByRecipeId(recipeId: Int) {
         val bundle = bundleOf(ARG_RECIPE_ID to recipeId)
-        parentFragmentManager.commit {
-            replace<RecipeFragment>(R.id.fragmentContainerView, args = bundle)
-            setReorderingAllowed(true)
-            addToBackStack(null)
-        }
+        findNavController().navigate(R.id.recipeFragment, bundle)
+//        parentFragmentManager.commit {
+//            replace<RecipeFragment>(R.id.fragmentContainerView, args = bundle)
+//            setReorderingAllowed(true)
+//            addToBackStack(null)
+//        }
     }
 
     private fun updateUIInfo(state: RecipeListViewModel.RecipeListState) {
