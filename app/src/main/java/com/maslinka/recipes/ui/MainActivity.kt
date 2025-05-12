@@ -2,12 +2,9 @@ package com.maslinka.recipes.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.add
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
+import androidx.navigation.findNavController
+import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.ActivityMainBinding
-import com.maslinka.recipes.ui.recipes.favourites.FavouritesFragment
-import com.maslinka.recipes.ui.categories.CategoriesListFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,30 +15,32 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        //проверка, что активность новая (только что созданная), а не восстановленная (как, например, при повороте)
-        //если активность новая, то добавляем фрагмент, а если не новая, значит фрагмент уже добавлен
-        if (savedInstanceState == null){
-            supportFragmentManager.commit {
-                add<CategoriesListFragment>(binding.fragmentContainerView.id)
-                setReorderingAllowed(true)
-            }
-        }
+//        //проверка, что активность новая (только что созданная), а не восстановленная (как, например, при повороте)
+//        //если активность новая, то добавляем фрагмент, а если не новая, значит фрагмент уже добавлен
+//        if (savedInstanceState == null){
+//            supportFragmentManager.commit {
+//                add<CategoriesListFragment>(binding.fragmentContainerView.id)
+//                setReorderingAllowed(true)
+//            }
+//        }
 
 
         binding.btnCategory.setOnClickListener {
-            supportFragmentManager.commit {
-                replace<CategoriesListFragment>(binding.fragmentContainerView.id)
-                setReorderingAllowed(true)
-                addToBackStack(null)
-            }
+            findNavController(R.id.nav_host_fragment).navigate(R.id.categoriesListFragment)
+//            supportFragmentManager.commit {
+//                replace<CategoriesListFragment>(binding.fragmentContainerView.id)
+//                setReorderingAllowed(true)
+//                addToBackStack(null)
+//            }
         }
 
         binding.btnFavourites.setOnClickListener {
-            supportFragmentManager.commit {
-                replace<FavouritesFragment>(binding.fragmentContainerView.id)
-                setReorderingAllowed(true)
-                addToBackStack(null)
-            }
+            findNavController(R.id.nav_host_fragment).navigate(R.id.favouritesFragment)
+//            supportFragmentManager.commit {
+//                replace<FavouritesFragment>(binding.fragmentContainerView.id)
+//                setReorderingAllowed(true)
+//                addToBackStack(null)
+//            }
         }
     }
 }

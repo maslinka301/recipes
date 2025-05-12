@@ -6,12 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.FragmentListCategoriesBinding
-import com.maslinka.recipes.ui.recipes.recipeList.RecipesListFragment
 
 class CategoriesListFragment : Fragment() {
 
@@ -71,10 +69,11 @@ class CategoriesListFragment : Fragment() {
 
 
     private fun navigateToRecipesList(bundle: Bundle) {
-        parentFragmentManager.commit {
-            replace<RecipesListFragment>(R.id.fragmentContainerView, args = bundle)
-            setReorderingAllowed(true)
-            addToBackStack(null)
-        }
+        findNavController().navigate(R.id.recipesListFragment, bundle)
+//        parentFragmentManager.commit {
+//            replace<RecipesListFragment>(R.id.fragmentContainerView, args = bundle)
+//            setReorderingAllowed(true)
+//            addToBackStack(null)
+//        }
     }
 }
