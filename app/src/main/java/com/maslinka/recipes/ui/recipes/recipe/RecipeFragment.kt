@@ -9,6 +9,7 @@ import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.maslinka.recipes.R
@@ -25,6 +26,8 @@ class RecipeFragment : Fragment() {
 
     private var ingredientsAdapter = IngredientsAdapter()
     private var methodAdapter = MethodAdapter()
+
+    private val recipeFragmentArgs: RecipeFragmentArgs by navArgs()
 
 
     override fun onCreateView(
@@ -43,9 +46,7 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initBundleData() {
-        val recipeId =
-            arguments?.getInt(ARG_RECIPE_ID) ?: throw IllegalStateException("Arguments are null")
-        initUI(recipeId)
+        initUI(recipeFragmentArgs.recipeId)
     }
 
     private fun initUI(recipeId: Int) {
