@@ -82,13 +82,7 @@ class RecipesListFragment : Fragment() {
     }
 
     fun openRecipeByRecipeId(recipeId: Int) {
-        val bundle = bundleOf(ARG_RECIPE_ID to recipeId)
-        findNavController().navigate(R.id.recipeFragment, bundle)
-//        parentFragmentManager.commit {
-//            replace<RecipeFragment>(R.id.fragmentContainerView, args = bundle)
-//            setReorderingAllowed(true)
-//            addToBackStack(null)
-//        }
+        findNavController().navigate(RecipesListFragmentDirections.actionRecipesListFragmentToRecipeFragment(recipeId))
     }
 
     private fun updateUIInfo(state: RecipeListViewModel.RecipeListState) {

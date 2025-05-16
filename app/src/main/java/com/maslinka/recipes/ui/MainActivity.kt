@@ -15,32 +15,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-//        //проверка, что активность новая (только что созданная), а не восстановленная (как, например, при повороте)
-//        //если активность новая, то добавляем фрагмент, а если не новая, значит фрагмент уже добавлен
-//        if (savedInstanceState == null){
-//            supportFragmentManager.commit {
-//                add<CategoriesListFragment>(binding.fragmentContainerView.id)
-//                setReorderingAllowed(true)
-//            }
-//        }
-
 
         binding.btnCategory.setOnClickListener {
             findNavController(R.id.nav_host_fragment).navigate(R.id.categoriesListFragment)
-//            supportFragmentManager.commit {
-//                replace<CategoriesListFragment>(binding.fragmentContainerView.id)
-//                setReorderingAllowed(true)
-//                addToBackStack(null)
-//            }
         }
 
         binding.btnFavourites.setOnClickListener {
             findNavController(R.id.nav_host_fragment).navigate(R.id.favouritesFragment)
-//            supportFragmentManager.commit {
-//                replace<FavouritesFragment>(binding.fragmentContainerView.id)
-//                setReorderingAllowed(true)
-//                addToBackStack(null)
-//            }
         }
     }
 }
