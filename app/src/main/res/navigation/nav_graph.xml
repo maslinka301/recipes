@@ -21,7 +21,11 @@
         android:id="@+id/recipeFragment"
         android:name="com.maslinka.recipes.ui.recipes.recipe.RecipeFragment"
         android:label="RecipeFragment"
-        tools:layout=''/>
+        tools:layout=''>
+        <argument
+            android:name="recipeId"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/favouritesFragment"
         android:name="com.maslinka.recipes.ui.recipes.favourites.FavouritesFragment"
@@ -30,6 +34,9 @@
         <action
             android:id="@+id/action_favouritesFragment_to_recipesListFragment"
             app:destination="@id/recipesListFragment" />
+        <action
+            android:id="@+id/action_favouritesFragment_to_categoriesListFragment"
+            app:destination="@id/categoriesListFragment" />
     </fragment>
     <fragment
         android:id="@+id/recipesListFragment"
