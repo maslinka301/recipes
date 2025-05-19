@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.ActivityMainBinding
+import com.maslinka.recipes.ui.categories.CategoriesListFragmentDirections
+import com.maslinka.recipes.ui.recipes.favourites.FavouritesFragmentDirections
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,11 +19,11 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.btnCategory.setOnClickListener {
-            findNavController(R.id.nav_host_fragment).navigate(R.id.categoriesListFragment)
+            findNavController(R.id.nav_host_fragment).navigate(FavouritesFragmentDirections.actionFavouritesFragmentToCategoriesListFragment())
         }
 
         binding.btnFavourites.setOnClickListener {
-            findNavController(R.id.nav_host_fragment).navigate(R.id.favouritesFragment)
+            findNavController(R.id.nav_host_fragment).navigate(CategoriesListFragmentDirections.actionCategoriesListFragmentToFavouritesFragment())
         }
     }
 }
