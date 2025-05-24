@@ -8,8 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.maslinka.recipes.R
+import com.maslinka.recipes.data.STUB
 import com.maslinka.recipes.databinding.FragmentListCategoriesBinding
+import com.maslinka.recipes.model.Category
 
 class CategoriesListFragment : Fragment() {
 
@@ -67,13 +68,10 @@ class CategoriesListFragment : Fragment() {
 
     }
 
-
-    private fun navigateToRecipesList(bundle: Bundle) {
-        findNavController().navigate(R.id.recipesListFragment, bundle)
-//        parentFragmentManager.commit {
-//            replace<RecipesListFragment>(R.id.fragmentContainerView, args = bundle)
-//            setReorderingAllowed(true)
-//            addToBackStack(null)
-//        }
+    private fun navigateToRecipesList(category: Category) {
+        if( category in STUB.getCategories())
+            findNavController().navigate(CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(category))
+        else
+            throw IllegalStateException("Category not found")
     }
 }

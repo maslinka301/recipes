@@ -4,13 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.FragmentFavouritesBinding
-import com.maslinka.recipes.ui.Constants.ARG_RECIPE_ID
 import com.maslinka.recipes.ui.categories.RecyclerViewsAdapter
 
 class FavouritesFragment : Fragment() {
@@ -85,13 +82,7 @@ class FavouritesFragment : Fragment() {
     }
 
     fun openRecipeByRecipeId(recipeId: Int) {
-        val bundle = bundleOf(ARG_RECIPE_ID to recipeId)
-        findNavController().navigate(R.id.recipeFragment, bundle)
-//        parentFragmentManager.commit {
-//            replace<RecipeFragment>(R.id.fragmentContainerView, args = bundle)
-//            setReorderingAllowed(true)
-//            addToBackStack(null)
-//        }
+        findNavController().navigate(FavouritesFragmentDirections.actionFavouritesFragmentToRecipeFragment(recipeId))
     }
 
 }

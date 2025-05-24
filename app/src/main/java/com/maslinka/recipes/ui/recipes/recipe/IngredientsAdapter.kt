@@ -41,15 +41,11 @@ class IngredientsAdapter:
         //stripTrailingZeros() - удаление незначащих нулей
         //scale() - возвращает кол-во знаков после запятой
         holder.binding.tvIngredientAmount.text =
-            if (amount.stripTrailingZeros().scale() == 0) {
-                "${amount.toInt()} ${dataSet[position].unitOfMeasure}"
-            } else {
-                "${amount.setScale(1)} ${dataSet[position].unitOfMeasure}"
+            when (amount.stripTrailingZeros().scale()){
+                0 -> "${amount.toInt()} ${dataSet[position].unitOfMeasure}"
+                else -> "${amount.stripTrailingZeros().toPlainString()} ${dataSet[position].unitOfMeasure}"
             }
-
         holder.binding.tvIngredientTitle.text = dataSet[position].description
-//        holder.binding.tvIngredientAmount.text =
-//            "${amount} ${dataSet[position].unitOfMeasure}"
     }
 
     @SuppressLint("NotifyDataSetChanged")

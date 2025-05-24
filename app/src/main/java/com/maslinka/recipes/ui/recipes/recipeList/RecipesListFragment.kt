@@ -4,16 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.maslinka.recipes.ui.Constants.ARG_CATEGORY_ID
-import com.maslinka.recipes.ui.Constants.ARG_CATEGORY_IMAGE_URL
-import com.maslinka.recipes.ui.Constants.ARG_CATEGORY_NAME
-import com.maslinka.recipes.R
+import androidx.navigation.fragment.navArgs
 import com.maslinka.recipes.databinding.FragmentListRecipesBinding
-import com.maslinka.recipes.ui.Constants.ARG_RECIPE_ID
 import com.maslinka.recipes.ui.categories.RecyclerViewsAdapter
 
 class RecipesListFragment : Fragment() {
@@ -24,6 +19,8 @@ class RecipesListFragment : Fragment() {
     private val recipeListViewModel: RecipeListViewModel by viewModels()
 
     private val recipeListAdapter = RecyclerViewsAdapter()
+
+    private val recipesListFragmentArgs: RecipesListFragmentArgs by navArgs()
 
 
     override fun onCreateView(
@@ -48,12 +45,8 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun initBundleData() {
-        arguments?.let { args ->
-            val categoryId = args.getInt(ARG_CATEGORY_ID)
-            val categoryName = args.getString(ARG_CATEGORY_NAME)
-            val categoryImageUrl = args.getString(ARG_CATEGORY_IMAGE_URL)
-            recipeListViewModel.initState(categoryId, categoryName, categoryImageUrl)
-        } ?: throw IllegalStateException("Arguments are null")
+        val category = recipesListFragmentArgs.category
+        recipeListViewModel.initState(category.id, category.title, category.imageUrl)
     }
 
     private fun initUI() {
