@@ -2,11 +2,8 @@ package com.maslinka.recipes.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
 
 @Parcelize
-@Serializable
 data class Recipe(
     val id: Int,
     val title: String,
