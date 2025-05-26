@@ -61,5 +61,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui)
 
+    implementation(libs.kotlinx.serialization.json)
+
     //implementation(libs.androidx.navigation.safe.args.gradle.plugin)
 }
