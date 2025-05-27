@@ -10,11 +10,14 @@ import com.maslinka.recipes.model.Category
 import kotlinx.serialization.json.Json
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
 
     //биндинг будет инициализирован с помощью inflate() только при первом обращении к нему
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,23 +25,34 @@ class MainActivity : AppCompatActivity() {
         Log.d("!!!", "Метод onCreate выполняется на потоке ${Thread.currentThread().name}")
 
         val thread = Thread{
-            val url = URL("https://recipes.androidsprint.ru/api/category")
-            val connection = url.openConnection() as HttpURLConnection
-            connection.connect()
-            val json = connection.inputStream.bufferedReader().readText()
-            val categories = Json.decodeFromString<List<Category>>(json)
+            val urlCategory = URL("https://recipes.androidsprint.ru/api/category")
+            val connectionCategory = urlCategory.openConnection() as HttpURLConnection
 
-            Log.d("!!!", "responseCode: ${connection.responseCode}")
-            Log.d("!!!", "responseMessage: ${connection.responseMessage}")
-            Log.d("!!!", "body: $json")
+            connectionCategory.connect()
+
+            val jsonCategory = connectionCategory.inputStream.bufferedReader().readText()
+            val categories = Json.decodeFromString<List<Category>>(jsonCategory)
+            lateinit var jsonRecipesInCategory: String
+
+            Log.d("!!!", "responseCode: ${connectionCategory.responseCode}")
+            Log.d("!!!", "responseMessage: ${connectionCategory.responseMessage}")
+            Log.d("!!!", "body: $jsonCategory")
             Log.d("!!!", "Выполняется запрос на потоке ${Thread.currentThread().name}")
             Log.d("!!!", "Список категорий $categories")
+
+            val threadPool = Executors.newFixedThreadPool(10)
+            for (category in categories){
+                threadPool.execute {
+                    val urlRecipesInCategory = URL("https://recipes.androidsprint.ru/api/category/${category.id}/recipes")
+                    val connectionRecipesInCategory = urlRecipesInCategory.openConnection() as HttpURLConnection
+                    connectionRecipesInCategory.connect()
+                    jsonRecipesInCategory = connectionRecipesInCategory.inputStream.bufferedReader().readText()
+                    //Log.d("!!!", "${Json.decodeFromString<List<Recipe>>(jsonRecipesInCategory)}")
+                    Log.d("!!!", jsonRecipesInCategory)
+                }
+            }
         }
         thread.start()
-
-
-
-
 
 
         binding.btnCategory.setOnClickListener {
