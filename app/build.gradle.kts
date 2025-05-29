@@ -63,5 +63,7 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
 
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
     //implementation(libs.androidx.navigation.safe.args.gradle.plugin)
 }
