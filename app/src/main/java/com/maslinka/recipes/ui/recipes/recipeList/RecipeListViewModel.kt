@@ -2,16 +2,22 @@ package com.maslinka.recipes.ui.recipes.recipeList
 
 import android.app.Application
 import android.graphics.drawable.Drawable
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.maslinka.recipes.data.STUB
+import com.maslinka.recipes.R
+import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Recipe
 
 class RecipeListViewModel(application: Application) : AndroidViewModel(application) {
 
-    val appContext = application.applicationContext
+    private val recipesRepository = RecipesRepository()
+
+    private val appContext = application.applicationContext
 
     private val _recipeListState = MutableLiveData<RecipeListState>()
     val recipeListState: LiveData<RecipeListState>
@@ -31,10 +37,21 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
         categoryId?.let { getRecipeList(it) }
     }
 
-    fun getRecipeList(categoryId: Int) {
-        _recipeListState.value = recipeListState.value?.copy(
-            recipeList = STUB.getRecipesByCategoryId(categoryId)
-        )
+    private fun getRecipeList(categoryId: Int) {
+        recipesRepository.getRecipesByCategoryId(categoryId, { result ->
+            if(result!=null){
+                Handler(Looper.getMainLooper()).post {
+                    _recipeListState.value = recipeListState.value?.copy(
+                        recipeList = result
+                    )
+                }
+            }
+            else{
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_LONG).show()
+                }
+            }
+        })
     }
 
     private fun getImageFromAssets(categoryImageUrl: String?): Drawable? {

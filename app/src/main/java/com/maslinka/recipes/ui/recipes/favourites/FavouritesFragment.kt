@@ -72,11 +72,11 @@ class FavouritesFragment : Fragment() {
 
     private fun updateRecycler(state: FavouritesViewModel.FavouritesState) {
         if (state.listIsEmpty) {
-            with(binding) {
-                rvFavourites.visibility = View.GONE
-                tvFavouriteListIsEmpty.visibility = View.VISIBLE
-            }
+            binding.rvFavourites.visibility = View.GONE
+            binding.tvFavouriteListIsEmpty.visibility = View.VISIBLE
         } else {
+            binding.rvFavourites.visibility = View.VISIBLE
+            binding.tvFavouriteListIsEmpty.visibility = View.GONE
             favouritesAdapter.dataSet = state.favouritesList
         }
     }

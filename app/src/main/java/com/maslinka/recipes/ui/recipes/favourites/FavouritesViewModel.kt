@@ -2,12 +2,15 @@ package com.maslinka.recipes.ui.recipes.favourites
 
 import android.app.Application
 import android.graphics.drawable.Drawable
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.maslinka.recipes.R
-import com.maslinka.recipes.data.STUB
+import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Recipe
 import com.maslinka.recipes.ui.AccessToPreferences
 import java.io.IOException
@@ -15,6 +18,8 @@ import java.io.IOException
 class FavouritesViewModel(application: Application) : AndroidViewModel(application) {
 
     private val appContext = application.applicationContext
+
+    private val recipesRepository = RecipesRepository()
 
     private val _favouritesState = MutableLiveData<FavouritesState>()
     val favouritesState: LiveData<FavouritesState>
@@ -29,12 +34,27 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun updateFavouritesList() {
-        val favouritesList =
-            STUB.getRecipesByIds(AccessToPreferences.getFavourites(appContext.applicationContext))
-        _favouritesState.value = favouritesState.value?.copy(
-            favouritesList = favouritesList,
-            listIsEmpty = favouritesList.isEmpty()
-        )
+        recipesRepository.getRecipesByIds(AccessToPreferences.getFavourites(appContext.applicationContext), { result ->
+            if (result != null) {
+                Handler(Looper.getMainLooper()).post {
+                    _favouritesState.value = favouritesState.value?.copy(
+                        favouritesList = result,
+                        listIsEmpty = result.isEmpty()
+                    ) ?: FavouritesState(
+                        favouritesList = result,
+                        listIsEmpty = result.isEmpty(),
+                        headerImage = getImageFromAssets(),
+                        contentDescription = R.string.content_description_favourites_fragment,
+                    )
+                }
+            }
+            else{
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_LONG).show()
+                }
+            }
+
+        })
     }
 
     private fun getImageFromAssets(): Drawable? {
