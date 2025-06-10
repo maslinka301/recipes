@@ -62,8 +62,10 @@ dependencies {
     implementation(libs.androidx.navigation.ui)
 
     implementation(libs.kotlinx.serialization.json)
+    implementation ("com.squareup.retrofit2:converter-kotlinx-serialization:3.0.0")
 
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
-    //implementation(libs.androidx.navigation.safe.args.gradle.plugin)
+    implementation(libs.retrofit)
+    implementation (libs.converter.gson)
 }

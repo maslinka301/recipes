@@ -13,4 +13,5 @@
     <string name="content_description_icon_heart">Add to favourites</string>
     <string name="favourite_text">избранное</string>
     <string name="favourite_list_is_empty">Вы еще не добавили ни одного рецепта в избранное</string>
+    <string name="network_error">Ошибка загрузки данных</string>
 </resources>
