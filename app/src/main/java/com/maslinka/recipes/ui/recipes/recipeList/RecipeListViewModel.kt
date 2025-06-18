@@ -12,12 +12,15 @@ import androidx.lifecycle.MutableLiveData
 import com.maslinka.recipes.R
 import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Recipe
+import java.util.concurrent.Executors
 
 class RecipeListViewModel(application: Application) : AndroidViewModel(application) {
 
     private val recipesRepository = RecipesRepository()
 
     private val appContext = application.applicationContext
+
+    private val thread = Executors.newSingleThreadExecutor()
 
     private val _recipeListState = MutableLiveData<RecipeListState>()
     val recipeListState: LiveData<RecipeListState>
@@ -38,20 +41,22 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     private fun getRecipeList(categoryId: Int) {
-        recipesRepository.getRecipesByCategoryId(categoryId, { result ->
-            if(result!=null){
-                Handler(Looper.getMainLooper()).post {
-                    _recipeListState.value = recipeListState.value?.copy(
-                        recipeList = result
-                    )
+        thread.execute {
+            recipesRepository.getRecipesByCategoryId(categoryId, { result ->
+                if(result!=null){
+                    Handler(Looper.getMainLooper()).post {
+                        _recipeListState.value = recipeListState.value?.copy(
+                            recipeList = result
+                        )
+                    }
                 }
-            }
-            else{
-                Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_LONG).show()
+                else{
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_LONG).show()
+                    }
                 }
-            }
-        })
+            })
+        }
     }
 
     private fun getImageFromAssets(categoryImageUrl: String?): Drawable? {

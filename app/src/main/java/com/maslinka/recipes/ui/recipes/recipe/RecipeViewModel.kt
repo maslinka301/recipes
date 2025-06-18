@@ -16,6 +16,9 @@ import com.maslinka.recipes.model.Recipe
 import com.maslinka.recipes.ui.AccessToPreferences.getFavourites
 import com.maslinka.recipes.ui.AccessToPreferences.saveFavourites
 import java.io.IOException
+import java.util.concurrent.Executor
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 
 class RecipeViewModel(
@@ -25,6 +28,8 @@ class RecipeViewModel(
     private val appContext: Context = application.applicationContext
 
     private val recipesRepository = RecipesRepository()
+
+    private val thread = Executors.newSingleThreadExecutor()
 
     //используется backing property
     //mutableCurrentRecipeState - для внутреннего использования
@@ -38,31 +43,34 @@ class RecipeViewModel(
     }
 
     fun loadRecipe(recipeId: Int) {
-        recipesRepository.getRecipeById(recipeId) { result ->
-            if (result != null) {
-                Handler(Looper.getMainLooper()).post {
-                    val isFavourite = recipeId in getFavourites(appContext)
-                    val recipeDrawable = getImageFromAssets(result.imageUrl)
-                        ?: throw IllegalStateException("Image is not found")
+        thread.execute {
+            recipesRepository.getRecipeById(recipeId) { result ->
+                if (result != null) {
+                    Handler(Looper.getMainLooper()).post {
+                        val isFavourite = recipeId in getFavourites(appContext)
+                        val recipeDrawable = getImageFromAssets(result.imageUrl)
+                            ?: throw IllegalStateException("Image is not found")
 
-                    _recipeState.value = recipeState.value?.copy(
-                        recipe = result,
-                        isFavourite = isFavourite,
-                        recipeDrawable = recipeDrawable
-                    ) ?: RecipeState(
-                        recipe = result,
-                        isFavourite = isFavourite,
-                        recipeDrawable = recipeDrawable
-                    )
+                        _recipeState.value = recipeState.value?.copy(
+                            recipe = result,
+                            isFavourite = isFavourite,
+                            recipeDrawable = recipeDrawable
+                        ) ?: RecipeState(
+                            recipe = result,
+                            isFavourite = isFavourite,
+                            recipeDrawable = recipeDrawable
+                        )
 
-                    Log.i("!!!", "Рецепт с id $recipeId загружен")
-                }
-            } else {
-                Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_SHORT).show()
+                        Log.i("!!!", "Рецепт с id $recipeId загружен")
+                    }
+                } else {
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
+
     }
 
     fun updateServings(servings: Int) {

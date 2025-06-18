@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.maslinka.recipes.databinding.ItemMethodStepBinding
-import com.maslinka.recipes.model.Ingredient
 
 class MethodAdapter : Adapter<MethodAdapter.MethodViewHolder>() {
 
