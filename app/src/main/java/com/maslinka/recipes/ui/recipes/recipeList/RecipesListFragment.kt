@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.FragmentListRecipesBinding
 import com.maslinka.recipes.ui.categories.RecyclerViewsAdapter
 
@@ -81,8 +83,17 @@ class RecipesListFragment : Fragment() {
     private fun updateUIInfo(state: RecipeListViewModel.RecipeListState) {
         with(binding) {
             tvRecipeListHeaderTitle.text = state.categoryName
-            ivRecipeListHeaderImage.setImageDrawable(state.categoryImage)
+            setImage(state)
         }
+    }
+
+    private fun setImage(state: RecipeListViewModel.RecipeListState){
+        Glide
+            .with(binding.ivRecipeListHeaderImage.context)
+            .load(state.categoryImageUrl)
+            .placeholder(R.drawable.img_placeholder)
+            .error(R.drawable.img_error)
+            .into(binding.ivRecipeListHeaderImage)
     }
 
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.bumptech.glide.Glide
 import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.ItemCategoryBinding
 import com.maslinka.recipes.databinding.ItemRecipeBinding
@@ -50,6 +51,7 @@ class RecyclerViewsAdapter() : RecyclerView.Adapter<ViewHolder>() {
     }
 
     class CategoryViewHolder(private val binding: ItemCategoryBinding) : ViewHolder(binding.root) {
+        private val imagesUrl = "https://recipes.androidsprint.ru/api/images/"
         fun bind(category: Category, itemClickListener: OnItemClickListener?) {
             binding.tvCategoryTitle.text = category.title
             binding.tvCategoryDescription.text = category.description
@@ -57,7 +59,7 @@ class RecyclerViewsAdapter() : RecyclerView.Adapter<ViewHolder>() {
             val drawable =
                 try {
                     Drawable.createFromStream(
-                        binding.ivCategoryImage.context.assets.open(category.imageUrl),
+                        binding.root.context.assets.open("drawable/img_placeholder.png"),
                         null
                     )
                 } catch (e: IOException) {
@@ -66,8 +68,15 @@ class RecyclerViewsAdapter() : RecyclerView.Adapter<ViewHolder>() {
                     null
                 }
 
+
             binding.ivCategoryImage.apply {
                 setImageDrawable(drawable)
+                Glide
+                    .with(context)
+                    .load(imagesUrl + category.imageUrl)
+                    .placeholder(R.drawable.img_placeholder)
+                    .error(R.drawable.img_error)
+                    .into(this)
                 scaleType = ImageView.ScaleType.CENTER_CROP
                 contentDescription = String.format(
                     binding.root.context.getString(R.string.content_description_category_item),
@@ -84,23 +93,19 @@ class RecyclerViewsAdapter() : RecyclerView.Adapter<ViewHolder>() {
     }
 
     class RecipeViewHolder(private val binding: ItemRecipeBinding) : ViewHolder(binding.root) {
+        private val imagesUrl = "https://recipes.androidsprint.ru/api/images/"
         fun bind(recipe: Recipe, itemClickListener: OnItemClickListener?) {
             binding.tvRecipe.text = recipe.title
 
-            val drawable =
-                try {
-                    Drawable.createFromStream(
-                        binding.root.context.assets.open(recipe.imageUrl),
-                        null
-                    )
-                } catch (e: IOException) {
-                    Log.e("!!!", "Error loading image from assets", e)
-                    e.printStackTrace()
-                    null
-                }
 
             binding.ivRecipe.apply {
                 setImageDrawable(drawable)
+                Glide
+                    .with(context)
+                    .load(imagesUrl + recipe.imageUrl)
+                    .placeholder(R.drawable.img_placeholder)
+                    .error(R.drawable.img_error)
+                    .into(this)
                 scaleType = ImageView.ScaleType.CENTER_CROP
                 contentDescription = String.format(
                     binding.root.context.getString(R.string.content_description_recipe_item),

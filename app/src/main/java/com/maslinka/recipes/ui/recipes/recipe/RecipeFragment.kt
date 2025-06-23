@@ -11,10 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.FragmentRecipeBinding
-import com.maslinka.recipes.ui.Constants.ARG_RECIPE_ID
 
 
 class RecipeFragment : Fragment() {
@@ -78,10 +78,17 @@ class RecipeFragment : Fragment() {
                     getString(R.string.content_description_recipe_item),
                     state.recipe?.title
                 )
-            ivRecipeListHeaderImage.setImageDrawable(
-                state.recipeDrawable
-            )
+            setImage(state)
         }
+    }
+
+    private fun setImage(state: RecipeViewModel.RecipeState){
+        Glide
+            .with(binding.ivRecipeListHeaderImage.context)
+            .load(state.recipeImageUrl)
+            .placeholder(R.drawable.img_placeholder)
+            .error(R.drawable.img_error)
+            .into(binding.ivRecipeListHeaderImage)
     }
 
     private fun updateServings(state: RecipeViewModel.RecipeState) {

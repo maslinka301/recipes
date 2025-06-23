@@ -1,10 +1,8 @@
 package com.maslinka.recipes.ui.recipes.recipeList
 
 import android.app.Application
-import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -26,16 +24,18 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
     val recipeListState: LiveData<RecipeListState>
         get() = _recipeListState
 
+    private val imagesUrl = "https://recipes.androidsprint.ru/api/images/"
+
 
     fun initState(categoryId: Int?, categoryName: String?, categoryImageUrl: String?) {
         _recipeListState.value = recipeListState.value?.copy(
             categoryId = categoryId,
             categoryName = categoryName,
-            categoryImage = getImageFromAssets(categoryImageUrl),
+            categoryImageUrl = imagesUrl + categoryImageUrl,
         ) ?: RecipeListState(
             categoryId = categoryId,
             categoryName = categoryName,
-            categoryImage = getImageFromAssets(categoryImageUrl),
+            categoryImageUrl = imagesUrl + categoryImageUrl,
         )
         categoryId?.let { getRecipeList(it) }
     }
@@ -43,14 +43,13 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
     private fun getRecipeList(categoryId: Int) {
         thread.execute {
             recipesRepository.getRecipesByCategoryId(categoryId, { result ->
-                if(result!=null){
+                if (result != null) {
                     Handler(Looper.getMainLooper()).post {
                         _recipeListState.value = recipeListState.value?.copy(
                             recipeList = result
                         )
                     }
-                }
-                else{
+                } else {
                     Handler(Looper.getMainLooper()).post {
                         Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_LONG).show()
                     }
@@ -59,27 +58,11 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    private fun getImageFromAssets(categoryImageUrl: String?): Drawable? {
-        val drawable =
-            try {
-                categoryImageUrl?.let {
-                    Drawable.createFromStream(
-                        appContext.assets.open(it),
-                        null
-                    )
-                }
-            } catch (e: Exception) {
-                Log.e("!!!", "Error loading image from assets", e)
-                e.printStackTrace()
-                null
-            }
-        return drawable
-    }
 
     data class RecipeListState(
         val categoryId: Int? = null,
         val categoryName: String? = null,
-        val categoryImage: Drawable? = null,
+        val categoryImageUrl: String? = null,
         val recipeList: List<Recipe> = emptyList(),
     )
 }
