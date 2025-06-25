@@ -55,17 +55,8 @@ class FavouritesFragment : Fragment() {
     }
 
     private fun updateUI(state: FavouritesViewModel.FavouritesState) {
-        setImage(state)
+        binding.ivFavouriteFragmentHeader.setImageResource(state.headerImageUrl)
         binding.ivFavouriteFragmentHeader.contentDescription = state.contentDescription.toString()
-    }
-
-    private fun setImage(state: FavouritesViewModel.FavouritesState){
-        Glide
-            .with(binding.ivFavouriteFragmentHeader.context)
-            .load(state.headerImageUrl)
-            .placeholder(R.drawable.img_placeholder)
-            .error(R.drawable.img_error)
-            .into(binding.ivFavouriteFragmentHeader)
     }
 
     private fun initRecyclerAdapter() {
@@ -90,7 +81,11 @@ class FavouritesFragment : Fragment() {
     }
 
     fun openRecipeByRecipeId(recipeId: Int) {
-        findNavController().navigate(FavouritesFragmentDirections.actionFavouritesFragmentToRecipeFragment(recipeId))
+        findNavController().navigate(
+            FavouritesFragmentDirections.actionFavouritesFragmentToRecipeFragment(
+                recipeId
+            )
+        )
     }
 
 }

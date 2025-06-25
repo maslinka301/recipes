@@ -25,12 +25,9 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
     val favouritesState: LiveData<FavouritesState>
         get() = _favouritesState
 
-    private val imagesUrl = "https://recipes.androidsprint.ru/api/images/"
-
 
     fun initState() {
         _favouritesState.value = FavouritesState(
-            headerImageUrl = imagesUrl + "bcg_favorites.png",
             contentDescription = R.string.content_description_favourites_fragment,
         )
     }
@@ -48,7 +45,7 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
                             ) ?: FavouritesState(
                                 favouritesList = result,
                                 listIsEmpty = result.isEmpty(),
-                                headerImageUrl = imagesUrl + "bcg_favorites.png",
+                                headerImageUrl = R.drawable.bcg_favorites,
                                 contentDescription = R.string.content_description_favourites_fragment,
                             )
                         }
@@ -58,14 +55,14 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
                                 .show()
                         }
                     }
-
-                })
+                }
+            )
         }
     }
 
 
     data class FavouritesState(
-        val headerImageUrl: String? = null,
+        val headerImageUrl: Int = R.drawable.bcg_favorites,
         val contentDescription: Int? = null,
         val favouritesList: List<Recipe> = emptyList(),
         val listIsEmpty: Boolean = true,

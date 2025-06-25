@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.ItemRecipeBinding
 import com.maslinka.recipes.model.Recipe
+import com.maslinka.recipes.ui.Constants.IMAGE_URL
 
 class RecipeListAdapter() : Adapter<RecipeListAdapter.RecipeListViewHolder>() {
 
@@ -20,7 +21,6 @@ class RecipeListAdapter() : Adapter<RecipeListAdapter.RecipeListViewHolder>() {
             notifyDataSetChanged()
         }
 
-    private val imagesUrl = "https://recipes.androidsprint.ru/api/images/"
 
     class RecipeListViewHolder(val binding: ItemRecipeBinding) : ViewHolder(binding.root)
 
@@ -40,7 +40,7 @@ class RecipeListAdapter() : Adapter<RecipeListAdapter.RecipeListViewHolder>() {
         holder.binding.ivRecipe.apply {
             Glide
                 .with(context)
-                .load(imagesUrl + dataSet[position].imageUrl)
+                .load(IMAGE_URL + dataSet[position].imageUrl)
                 .placeholder(R.drawable.img_placeholder)
                 .error(R.drawable.img_error)
                 .into(this)

@@ -1,8 +1,6 @@
 package com.maslinka.recipes.ui.categories
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -14,7 +12,7 @@ import com.maslinka.recipes.databinding.ItemCategoryBinding
 import com.maslinka.recipes.databinding.ItemRecipeBinding
 import com.maslinka.recipes.model.Category
 import com.maslinka.recipes.model.Recipe
-import java.io.IOException
+import com.maslinka.recipes.ui.Constants.IMAGE_URL
 
 class RecyclerViewsAdapter() : RecyclerView.Adapter<ViewHolder>() {
     var dataSet: List<Any> = emptyList()
@@ -51,29 +49,14 @@ class RecyclerViewsAdapter() : RecyclerView.Adapter<ViewHolder>() {
     }
 
     class CategoryViewHolder(private val binding: ItemCategoryBinding) : ViewHolder(binding.root) {
-        private val imagesUrl = "https://recipes.androidsprint.ru/api/images/"
         fun bind(category: Category, itemClickListener: OnItemClickListener?) {
             binding.tvCategoryTitle.text = category.title
             binding.tvCategoryDescription.text = category.description
 
-            val drawable =
-                try {
-                    Drawable.createFromStream(
-                        binding.root.context.assets.open("drawable/img_placeholder.png"),
-                        null
-                    )
-                } catch (e: IOException) {
-                    Log.e("!!!", "Error loading image from assets", e)
-                    e.printStackTrace()
-                    null
-                }
-
-
             binding.ivCategoryImage.apply {
-                setImageDrawable(drawable)
                 Glide
                     .with(context)
-                    .load(imagesUrl + category.imageUrl)
+                    .load(IMAGE_URL + category.imageUrl)
                     .placeholder(R.drawable.img_placeholder)
                     .error(R.drawable.img_error)
                     .into(this)
@@ -87,22 +70,17 @@ class RecyclerViewsAdapter() : RecyclerView.Adapter<ViewHolder>() {
             binding.root.setOnClickListener {
                 itemClickListener?.onItemClick(category.id)
             }
-
         }
-
     }
 
     class RecipeViewHolder(private val binding: ItemRecipeBinding) : ViewHolder(binding.root) {
-        private val imagesUrl = "https://recipes.androidsprint.ru/api/images/"
         fun bind(recipe: Recipe, itemClickListener: OnItemClickListener?) {
             binding.tvRecipe.text = recipe.title
 
-
             binding.ivRecipe.apply {
-                setImageDrawable(drawable)
                 Glide
                     .with(context)
-                    .load(imagesUrl + recipe.imageUrl)
+                    .load(IMAGE_URL + recipe.imageUrl)
                     .placeholder(R.drawable.img_placeholder)
                     .error(R.drawable.img_error)
                     .into(this)

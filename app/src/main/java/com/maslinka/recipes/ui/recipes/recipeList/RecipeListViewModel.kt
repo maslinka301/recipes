@@ -11,6 +11,7 @@ import com.maslinka.recipes.R
 import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Recipe
 import java.util.concurrent.Executors
+import com.maslinka.recipes.ui.Constants.IMAGE_URL
 
 class RecipeListViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -24,18 +25,16 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
     val recipeListState: LiveData<RecipeListState>
         get() = _recipeListState
 
-    private val imagesUrl = "https://recipes.androidsprint.ru/api/images/"
-
 
     fun initState(categoryId: Int?, categoryName: String?, categoryImageUrl: String?) {
         _recipeListState.value = recipeListState.value?.copy(
             categoryId = categoryId,
             categoryName = categoryName,
-            categoryImageUrl = imagesUrl + categoryImageUrl,
+            categoryImageUrl = IMAGE_URL + categoryImageUrl,
         ) ?: RecipeListState(
             categoryId = categoryId,
             categoryName = categoryName,
-            categoryImageUrl = imagesUrl + categoryImageUrl,
+            categoryImageUrl = IMAGE_URL + categoryImageUrl,
         )
         categoryId?.let { getRecipeList(it) }
     }

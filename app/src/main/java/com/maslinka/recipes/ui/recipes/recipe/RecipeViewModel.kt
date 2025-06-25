@@ -15,6 +15,7 @@ import com.maslinka.recipes.model.Recipe
 import com.maslinka.recipes.ui.AccessToPreferences.getFavourites
 import com.maslinka.recipes.ui.AccessToPreferences.saveFavourites
 import java.util.concurrent.Executors
+import com.maslinka.recipes.ui.Constants.IMAGE_URL
 
 
 class RecipeViewModel(
@@ -34,8 +35,6 @@ class RecipeViewModel(
     val recipeState: LiveData<RecipeState>
         get() = _recipeState
 
-    private val imagesUrl = "https://recipes.androidsprint.ru/api/images/"
-
     init {
         Log.i("!!!", "ViewModel init")
     }
@@ -46,7 +45,7 @@ class RecipeViewModel(
                 if (result != null) {
                     Handler(Looper.getMainLooper()).post {
                         val isFavourite = recipeId in getFavourites(appContext)
-                        val recipeDrawable = imagesUrl + result.imageUrl
+                        val recipeDrawable = IMAGE_URL + result.imageUrl
 
                         _recipeState.value = recipeState.value?.copy(
                             recipe = result,

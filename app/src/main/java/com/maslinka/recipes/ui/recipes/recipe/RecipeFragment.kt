@@ -82,7 +82,7 @@ class RecipeFragment : Fragment() {
         }
     }
 
-    private fun setImage(state: RecipeViewModel.RecipeState){
+    private fun setImage(state: RecipeViewModel.RecipeState) {
         Glide
             .with(binding.ivRecipeListHeaderImage.context)
             .load(state.recipeImageUrl)
@@ -124,8 +124,8 @@ class RecipeFragment : Fragment() {
 
     private fun setupSeekBar() {
         binding.sbServingsNumber.setOnSeekBarChangeListener(PortionSeekBarListener { progress ->
-                recipeViewModel.updateServings(progress)
-            })
+            recipeViewModel.updateServings(progress)
+        })
     }
 
 
