@@ -53,12 +53,16 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
                     }
                 } else {
                     Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(appContext, "НЕ РОБИТ", Toast.LENGTH_LONG).show()
+                        Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_LONG).show()
                     }
                 }
 
             })
         }
+    }
+
+    fun navigationReset(){
+        _categoryListState.value = _categoryListState.value?.copy(navigationData = null)
     }
 
     data class CategoriesListState(

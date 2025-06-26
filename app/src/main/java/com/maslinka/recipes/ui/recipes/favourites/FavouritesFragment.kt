@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.FragmentFavouritesBinding
 import com.maslinka.recipes.ui.categories.RecyclerViewsAdapter
 
@@ -53,11 +55,8 @@ class FavouritesFragment : Fragment() {
     }
 
     private fun updateUI(state: FavouritesViewModel.FavouritesState) {
-        with(binding) {
-            ivFavouriteFragmentHeader.setImageDrawable(state.headerImage)
-            ivFavouriteFragmentHeader.contentDescription = state.contentDescription.toString()
-        }
-
+        binding.ivFavouriteFragmentHeader.setImageResource(state.headerImageUrl)
+        binding.ivFavouriteFragmentHeader.contentDescription = state.contentDescription.toString()
     }
 
     private fun initRecyclerAdapter() {
@@ -82,7 +81,11 @@ class FavouritesFragment : Fragment() {
     }
 
     fun openRecipeByRecipeId(recipeId: Int) {
-        findNavController().navigate(FavouritesFragmentDirections.actionFavouritesFragmentToRecipeFragment(recipeId))
+        findNavController().navigate(
+            FavouritesFragmentDirections.actionFavouritesFragmentToRecipeFragment(
+                recipeId
+            )
+        )
     }
 
 }

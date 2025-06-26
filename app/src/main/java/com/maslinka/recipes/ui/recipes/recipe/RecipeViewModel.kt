@@ -2,7 +2,6 @@ package com.maslinka.recipes.ui.recipes.recipe
 
 import android.app.Application
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -15,10 +14,8 @@ import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Recipe
 import com.maslinka.recipes.ui.AccessToPreferences.getFavourites
 import com.maslinka.recipes.ui.AccessToPreferences.saveFavourites
-import java.io.IOException
-import java.util.concurrent.Executor
-import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import com.maslinka.recipes.ui.Constants.IMAGE_URL
 
 
 class RecipeViewModel(
@@ -48,24 +45,24 @@ class RecipeViewModel(
                 if (result != null) {
                     Handler(Looper.getMainLooper()).post {
                         val isFavourite = recipeId in getFavourites(appContext)
-                        val recipeDrawable = getImageFromAssets(result.imageUrl)
-                            ?: throw IllegalStateException("Image is not found")
+                        val recipeDrawable = IMAGE_URL + result.imageUrl
 
                         _recipeState.value = recipeState.value?.copy(
                             recipe = result,
                             isFavourite = isFavourite,
-                            recipeDrawable = recipeDrawable
+                            recipeImageUrl = recipeDrawable
                         ) ?: RecipeState(
                             recipe = result,
                             isFavourite = isFavourite,
-                            recipeDrawable = recipeDrawable
+                            recipeImageUrl = recipeDrawable
                         )
 
                         Log.i("!!!", "Рецепт с id $recipeId загружен")
                     }
                 } else {
                     Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             }
@@ -90,23 +87,12 @@ class RecipeViewModel(
         saveFavourites(appContext, favouriteSet)
     }
 
-    fun getImageFromAssets(imageUrl: String): Drawable? {
-        val drawable =
-            try {
-                Drawable.createFromStream(appContext.assets.open(imageUrl), null)
-            } catch (e: IOException) {
-                Log.e("!!!", "Error loading image from assets", e)
-                e.printStackTrace()
-                null
-            }
-        return drawable
-    }
 
     data class RecipeState(
         val recipe: Recipe? = null,
         val numberOfServings: Int = 1,
         val isFavourite: Boolean = false,
-        val recipeDrawable: Drawable? = null,
+        val recipeImageUrl: String? = null,
     )
 
 }

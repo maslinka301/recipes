@@ -58,13 +58,15 @@ class CategoriesListFragment : Fragment() {
     private fun setupObservers() {
         categoriesListViewModel.categoryListState.observe(viewLifecycleOwner) { state ->
             updateRecycler(state)
-            state.navigationData?.let { navigateToRecipesList(it) }
+            state.navigationData?.let {
+                navigateToRecipesList(it)
+                categoriesListViewModel.navigationReset()
+            }
         }
     }
 
     private fun updateRecycler(state: CategoriesListViewModel.CategoriesListState) {
         categoriesListAdapter.dataSet = state.categoriesList
-
     }
 
     private fun navigateToRecipesList(category: Category) {
