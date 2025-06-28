@@ -2,22 +2,20 @@ package com.maslinka.recipes.ui.categories
 
 
 import android.app.Application
-import android.os.Handler
-import android.os.Looper
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.maslinka.recipes.R
 import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Category
-import java.util.concurrent.Executors
+import kotlinx.coroutines.launch
+
 
 class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
 
     private val appContext = application.applicationContext
-
-    private val thread = Executors.newSingleThreadExecutor()
 
     private val recipesRepository = RecipesRepository()
     private val _categoryListState = MutableLiveData<CategoriesListState>()
@@ -25,39 +23,28 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
         get() = _categoryListState
 
     fun loadCategories() {
-        thread.execute {
-            recipesRepository.getCategories { result ->
-                if (result != null) {
-                    Handler(Looper.getMainLooper()).post {
-                        _categoryListState.value = CategoriesListState(
-                            categoriesList = result
-                        )
-                    }
-                } else {
-                    Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_LONG).show()
-                    }
-                }
+        viewModelScope.launch {
+            val result = recipesRepository.getCategories()
+            if (result != null) {
+                _categoryListState.value = CategoriesListState(
+                    categoriesList = result
+                )
+            } else {
+                Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_LONG).show()
             }
         }
     }
 
     fun prepareNavigation(categoryId: Int) {
-        thread.execute {
-            recipesRepository.getCategory(categoryId, { result ->
-                if (result != null) {
-                    Handler(Looper.getMainLooper()).post {
-                        _categoryListState.value = categoryListState.value?.copy(
-                            navigationData = result
-                        )
-                    }
-                } else {
-                    Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_LONG).show()
-                    }
-                }
-
-            })
+        viewModelScope.launch {
+            val result = recipesRepository.getCategory(categoryId)
+            if (result != null) {
+                _categoryListState.value = categoryListState.value?.copy(
+                    navigationData = result
+                )
+            } else {
+                Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_LONG).show()
+            }
         }
     }
 

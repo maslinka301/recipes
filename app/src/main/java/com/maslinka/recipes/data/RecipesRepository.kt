@@ -8,6 +8,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import android.util.Log
 import com.maslinka.recipes.model.Recipe
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class RecipesRepository {
 
@@ -19,69 +21,78 @@ class RecipesRepository {
 
     private var service: RecipeApiService = retrofit.create(RecipeApiService::class.java)
 
-    fun getCategories(callback: (List<Category>?) -> Unit) {
-        try {
-            val categories: Response<List<Category>> = service.getCategories().execute()
-            Log.d("!!!", categories.code().toString())
-            val result = if (categories.isSuccessful) categories.body() else null
-            callback(result)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            callback(null)
+    suspend fun getCategories(): List<Category>? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val categories: Response<List<Category>> = service.getCategories().execute()
+                Log.d("!!!", categories.code().toString())
+                val result = if (categories.isSuccessful) categories.body() else null
+                result
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
         }
     }
 
-    fun getRecipesByCategoryId(id: Int, callback: (List<Recipe>?) -> Unit) {
-        try {
-            val response = service.getRecipesByCategoryId(id.toString()).execute()
-            Log.d("!!!", response.code().toString())
-            val result = if (response.isSuccessful) response.body() else null
-            callback(result)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            callback(null)
+    suspend fun getRecipesByCategoryId(id: Int): List<Recipe>? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = service.getRecipesByCategoryId(id.toString()).execute()
+                Log.d("!!!", response.code().toString())
+                val result = if (response.isSuccessful) response.body() else null
+                result
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
         }
     }
 
-    fun getCategory(id: Int, callback: (Category?) -> Unit) {
-        try {
-            val response = service.getCategory(id.toString()).execute()
-            val result = if (response.isSuccessful) response.body() else null
-            callback(result)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            callback(null)
+    suspend fun getCategory(id: Int): Category? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = service.getCategory(id.toString()).execute()
+                val result = if (response.isSuccessful) response.body() else null
+                result
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
         }
     }
 
-    fun getRecipeById(id: Int, callback: (Recipe?) -> Unit) {
-        try {
-            val response = service.getRecipeById(id.toString()).execute()
-            val result = if (response.isSuccessful) response.body() else null
-            callback(result)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            callback(null)
+    suspend fun getRecipeById(id: Int): Recipe? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = service.getRecipeById(id.toString()).execute()
+                val result = if (response.isSuccessful) response.body() else null
+                result
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
         }
     }
 
-    fun getRecipesByIds(ids: MutableSet<Int>, callback: (List<Recipe>?) -> Unit) {
-        try {
-            val idsStr = ids.joinToString(",")
-            Log.d("!!!", "Запрос рецептов $idsStr")
-            val response = service.getRecipesByIds(idsStr).execute()
-            val call = service.getRecipesByIds(idsStr)
-            Log.d(
-                "!!!",
-                "код: ${response.code()}, тело: ${response.body()}, url ${call.request()}"
-            )
-            val result = if (response.isSuccessful) response.body() else null
-            callback(result)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            callback(null)
+    suspend fun getRecipesByIds(ids: MutableSet<Int>): List<Recipe>? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val idsStr = ids.joinToString(",")
+                Log.d("!!!", "Запрос рецептов $idsStr")
+                val response = service.getRecipesByIds(idsStr).execute()
+                val call = service.getRecipesByIds(idsStr)
+                Log.d(
+                    "!!!",
+                    "код: ${response.code()}, тело: ${response.body()}, url ${call.request()}"
+                )
+                val result = if (response.isSuccessful) response.body() else null
+                result
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
         }
+
     }
-
-
 }

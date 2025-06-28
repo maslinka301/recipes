@@ -1,25 +1,22 @@
 package com.maslinka.recipes.ui.recipes.recipeList
 
 import android.app.Application
-import android.os.Handler
-import android.os.Looper
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.maslinka.recipes.R
 import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Recipe
-import java.util.concurrent.Executors
 import com.maslinka.recipes.ui.Constants.IMAGE_URL
+import kotlinx.coroutines.launch
 
 class RecipeListViewModel(application: Application) : AndroidViewModel(application) {
 
     private val recipesRepository = RecipesRepository()
 
     private val appContext = application.applicationContext
-
-    private val thread = Executors.newSingleThreadExecutor()
 
     private val _recipeListState = MutableLiveData<RecipeListState>()
     val recipeListState: LiveData<RecipeListState>
@@ -40,20 +37,15 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     private fun getRecipeList(categoryId: Int) {
-        thread.execute {
-            recipesRepository.getRecipesByCategoryId(categoryId, { result ->
-                if (result != null) {
-                    Handler(Looper.getMainLooper()).post {
-                        _recipeListState.value = recipeListState.value?.copy(
-                            recipeList = result
-                        )
-                    }
-                } else {
-                    Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_LONG).show()
-                    }
-                }
-            })
+        viewModelScope.launch {
+            val result = recipesRepository.getRecipesByCategoryId(categoryId)
+            if (result != null) {
+                _recipeListState.value = recipeListState.value?.copy(
+                    recipeList = result
+                )
+            } else {
+                Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_LONG).show()
+            }
         }
     }
 
