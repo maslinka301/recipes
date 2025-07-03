@@ -23,7 +23,7 @@ class RecipeViewModel(
 
     private val appContext: Context = application.applicationContext
 
-    private val recipesRepository = RecipesRepository()
+    private val recipesRepository = RecipesRepository(appContext)
 
     //используется backing property
     //mutableCurrentRecipeState - для внутреннего использования

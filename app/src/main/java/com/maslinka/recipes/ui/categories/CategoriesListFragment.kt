@@ -35,6 +35,7 @@ class CategoriesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initRecycler()
         setupObservers()
+        categoriesListViewModel.loadCategoriesFromCache()
         categoriesListViewModel.loadCategories()
     }
 

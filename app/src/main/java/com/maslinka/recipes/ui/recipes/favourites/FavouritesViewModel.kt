@@ -16,7 +16,7 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
 
     private val appContext = application.applicationContext
 
-    private val recipesRepository = RecipesRepository()
+    private val recipesRepository = RecipesRepository(appContext)
 
     private val _favouritesState = MutableLiveData<FavouritesState>()
     val favouritesState: LiveData<FavouritesState>
