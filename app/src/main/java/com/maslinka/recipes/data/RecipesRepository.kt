@@ -1,5 +1,6 @@
 package com.maslinka.recipes.data
 
+import android.content.Context
 import com.maslinka.recipes.model.Category
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -11,7 +12,7 @@ import com.maslinka.recipes.model.Recipe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class RecipesRepository {
+class RecipesRepository(context: Context) {
 
     private var retrofit: Retrofit = Retrofit.Builder()
         .baseUrl("https://recipes.androidsprint.ru/api/")
@@ -21,12 +22,17 @@ class RecipesRepository {
 
     private var service: RecipeApiService = retrofit.create(RecipeApiService::class.java)
 
+    private val db = RecipesDatabase.getDatabase(context)
+
     suspend fun getCategories(): List<Category>? {
         return withContext(Dispatchers.IO) {
             try {
                 val categories: Response<List<Category>> = service.getCategories().execute()
                 Log.d("!!!", categories.code().toString())
                 val result = if (categories.isSuccessful) categories.body() else null
+                if (result != null) {
+                    db.categoriesDao().addCategories(result)
+                }
                 result
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -93,6 +99,11 @@ class RecipesRepository {
                 null
             }
         }
+    }
 
+    suspend fun getCategoriesFromCache(): List<Category>{
+        return withContext(Dispatchers.IO){
+            db.categoriesDao().getAllCategories()
+        }
     }
 }

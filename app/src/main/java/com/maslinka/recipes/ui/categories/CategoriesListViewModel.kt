@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.maslinka.recipes.R
+import com.maslinka.recipes.data.RecipesDatabase
 import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Category
 import kotlinx.coroutines.launch
@@ -17,10 +18,19 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
 
     private val appContext = application.applicationContext
 
-    private val recipesRepository = RecipesRepository()
+    private val recipesRepository = RecipesRepository(appContext)
     private val _categoryListState = MutableLiveData<CategoriesListState>()
     val categoryListState: LiveData<CategoriesListState>
         get() = _categoryListState
+
+    fun loadCategoriesFromCache(){
+        viewModelScope.launch {
+            val result = recipesRepository.getCategoriesFromCache()
+            _categoryListState.value = CategoriesListState(
+                categoriesList = result
+            )
+        }
+    }
 
     fun loadCategories() {
         viewModelScope.launch {
