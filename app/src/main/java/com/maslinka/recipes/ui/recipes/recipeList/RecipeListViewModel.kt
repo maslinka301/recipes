@@ -33,8 +33,21 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
             categoryName = categoryName,
             categoryImageUrl = IMAGE_URL + categoryImageUrl,
         )
-        categoryId?.let { getRecipeList(it) }
+        categoryId?.let {
+            getRecipeListFromCache(it)
+            getRecipeList(it)
+        }
     }
+
+    private fun getRecipeListFromCache(categoryId: Int){
+        viewModelScope.launch {
+            val result = recipesRepository.getRecipesFromCache(categoryId)
+            _recipeListState.value = recipeListState.value?.copy(
+                recipeList = result
+            )
+        }
+    }
+
 
     private fun getRecipeList(categoryId: Int) {
         viewModelScope.launch {

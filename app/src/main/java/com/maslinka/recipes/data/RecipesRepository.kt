@@ -47,6 +47,10 @@ class RecipesRepository(context: Context) {
                 val response = service.getRecipesByCategoryId(id.toString()).execute()
                 Log.d("!!!", response.code().toString())
                 val result = if (response.isSuccessful) response.body() else null
+                if (result != null){
+                    val resultForCache = result.map { it.copy(categoryId = id) }
+                    db.recipesDao().addRecipes(resultForCache)
+                }
                 result
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -104,6 +108,12 @@ class RecipesRepository(context: Context) {
     suspend fun getCategoriesFromCache(): List<Category>{
         return withContext(Dispatchers.IO){
             db.categoriesDao().getAllCategories()
+        }
+    }
+
+    suspend fun getRecipesFromCache(categoryId: Int): List<Recipe>{
+        return withContext(Dispatchers.IO){
+            db.recipesDao().getRecipesByCategoryId(categoryId)
         }
     }
 }
