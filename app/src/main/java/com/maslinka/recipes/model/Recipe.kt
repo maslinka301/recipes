@@ -13,9 +13,10 @@ import kotlinx.serialization.Transient
 @Serializable
 data class Recipe(
     @PrimaryKey val id: Int,
-    @ColumnInfo (name = "recipe_title") val title: String,
-    @ColumnInfo (name = "recipe_ingredients") val ingredients: List<Ingredient>,
-    @ColumnInfo (name = "recipe_method") val method: List<String>,
-    @ColumnInfo (name = "recipe_imageUrl") val imageUrl: String,
-    @Transient @ColumnInfo (name = "recipe_categoryId") val categoryId: Int? = null,
+    @ColumnInfo(name = "recipe_title") val title: String,
+    @ColumnInfo(name = "recipe_ingredients") val ingredients: List<Ingredient>,
+    @ColumnInfo(name = "recipe_method") val method: List<String>,
+    @ColumnInfo(name = "recipe_imageUrl") val imageUrl: String,
+    @Transient @ColumnInfo(name = "recipe_categoryId") val categoryId: Int? = null,
+    @Transient @ColumnInfo(name = "recipe_isFavourite") val isFavorite: Boolean = false,
 ) : Parcelable

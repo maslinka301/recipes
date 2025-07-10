@@ -1,7 +1,7 @@
 package com.maslinka.recipes.ui.recipes.favourites
 
 import android.app.Application
-import android.widget.Toast
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.maslinka.recipes.R
 import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Recipe
-import com.maslinka.recipes.ui.AccessToPreferences
 import kotlinx.coroutines.launch
 
 class FavouritesViewModel(application: Application) : AndroidViewModel(application) {
@@ -29,26 +28,41 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
         )
     }
 
-    fun updateFavouritesList() {
+    fun getFavouritesListFromCache() {
         viewModelScope.launch {
-            val result = recipesRepository.getRecipesByIds(
-                AccessToPreferences.getFavourites(appContext.applicationContext))
-            if (result != null) {
-                _favouritesState.value = favouritesState.value?.copy(
-                    favouritesList = result,
-                    listIsEmpty = result.isEmpty()
-                ) ?: FavouritesState(
-                    favouritesList = result,
-                    listIsEmpty = result.isEmpty(),
-                    headerImageUrl = R.drawable.bcg_favorites,
-                    contentDescription = R.string.content_description_favourites_fragment,
+            Log.d("!!!", recipesRepository.getFavouritesRecipesFromCache().toString())
+            val favouritesList = recipesRepository.getFavouritesRecipesFromCache()
+            _favouritesState.value =
+                favouritesState.value?.copy(
+                    favouritesList = favouritesList,
+                    listIsEmpty = favouritesList.isEmpty()
                 )
-            } else {
-                Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_LONG)
-                    .show()
-            }
         }
+    }
 
+//    fun updateFavouritesList() {
+//        viewModelScope.launch {
+//            val result = recipesRepository.getRecipesByIds(
+//                AccessToPreferences.getFavourites(appContext.applicationContext)
+//            )
+//            if (result != null) {
+//                _favouritesState.value = favouritesState.value?.copy(
+//                    favouritesList = result,
+//                    listIsEmpty = result.isEmpty()
+//                ) ?: FavouritesState(
+//                    favouritesList = result,
+//                    listIsEmpty = result.isEmpty(),
+//                    headerImageUrl = R.drawable.bcg_favorites,
+//                    contentDescription = R.string.content_description_favourites_fragment,
+//                )
+//            } else {
+//                _favouritesState.value = favouritesState.value?.copy(showNetworkError = true)
+//            }
+//        }
+//    }
+
+    fun resetError() {
+        _favouritesState.value = favouritesState.value?.copy(showNetworkError = false)
     }
 
 
@@ -57,5 +71,6 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
         val contentDescription: Int? = null,
         val favouritesList: List<Recipe> = emptyList(),
         val listIsEmpty: Boolean = true,
+        val showNetworkError: Boolean = false,
     )
 }

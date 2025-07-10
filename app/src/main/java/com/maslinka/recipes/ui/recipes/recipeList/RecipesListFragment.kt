@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.FragmentListRecipesBinding
 import com.maslinka.recipes.ui.categories.RecyclerViewsAdapter
+import com.maslinka.recipes.ui.recipes.recipe.RecipeViewModel
 
 class RecipesListFragment : Fragment() {
     private var _binding: FragmentListRecipesBinding? = null
@@ -69,6 +71,7 @@ class RecipesListFragment : Fragment() {
         recipeListViewModel.recipeListState.observe(viewLifecycleOwner) { state ->
             updateUIInfo(state)
             updateRecycler(state)
+            showNetworkErrorToast(state)
         }
     }
 
@@ -77,7 +80,11 @@ class RecipesListFragment : Fragment() {
     }
 
     fun openRecipeByRecipeId(recipeId: Int) {
-        findNavController().navigate(RecipesListFragmentDirections.actionRecipesListFragmentToRecipeFragment(recipeId))
+        findNavController().navigate(
+            RecipesListFragmentDirections.actionRecipesListFragmentToRecipeFragment(
+                recipeId
+            )
+        )
     }
 
     private fun updateUIInfo(state: RecipeListViewModel.RecipeListState) {
@@ -87,13 +94,20 @@ class RecipesListFragment : Fragment() {
         }
     }
 
-    private fun setImage(state: RecipeListViewModel.RecipeListState){
+    private fun setImage(state: RecipeListViewModel.RecipeListState) {
         Glide
             .with(binding.ivRecipeListHeaderImage.context)
             .load(state.categoryImageUrl)
             .placeholder(R.drawable.img_placeholder)
             .error(R.drawable.img_error)
             .into(binding.ivRecipeListHeaderImage)
+    }
+
+    private fun showNetworkErrorToast(state: RecipeListViewModel.RecipeListState) {
+        if (state.showNetworkError) {
+            Toast.makeText(requireContext(), R.string.network_error, Toast.LENGTH_SHORT).show()
+            recipeListViewModel.resetError()
+        }
     }
 
 }

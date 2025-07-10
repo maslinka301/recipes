@@ -23,7 +23,7 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
     val categoryListState: LiveData<CategoriesListState>
         get() = _categoryListState
 
-    fun loadCategoriesFromCache(){
+    fun loadCategoriesFromCache() {
         viewModelScope.launch {
             val result = recipesRepository.getCategoriesFromCache()
             _categoryListState.value = CategoriesListState(
@@ -40,7 +40,8 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
                     categoriesList = result
                 )
             } else {
-                Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_LONG).show()
+                _categoryListState.value = categoryListState.value?.copy(showNetworkError = true)
+                //Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -58,12 +59,17 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
         }
     }
 
-    fun navigationReset(){
+    fun navigationReset() {
         _categoryListState.value = _categoryListState.value?.copy(navigationData = null)
+    }
+
+    fun resetError() {
+        _categoryListState.value = categoryListState.value?.copy(showNetworkError = false)
     }
 
     data class CategoriesListState(
         val categoriesList: List<Category> = emptyList(),
-        val navigationData: Category? = null
+        val navigationData: Category? = null,
+        val showNetworkError: Boolean = false,
     )
 }

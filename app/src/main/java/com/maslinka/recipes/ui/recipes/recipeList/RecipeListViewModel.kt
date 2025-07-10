@@ -39,7 +39,11 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    private fun getRecipeListFromCache(categoryId: Int){
+    fun resetError() {
+        _recipeListState.value = recipeListState.value?.copy(showNetworkError = false)
+    }
+
+    private fun getRecipeListFromCache(categoryId: Int) {
         viewModelScope.launch {
             val result = recipesRepository.getRecipesFromCache(categoryId)
             _recipeListState.value = recipeListState.value?.copy(
@@ -57,7 +61,7 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
                     recipeList = result
                 )
             } else {
-                Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_LONG).show()
+                _recipeListState.value = recipeListState.value?.copy(showNetworkError = true)
             }
         }
     }
@@ -68,5 +72,6 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
         val categoryName: String? = null,
         val categoryImageUrl: String? = null,
         val recipeList: List<Recipe> = emptyList(),
+        val showNetworkError: Boolean = false,
     )
 }

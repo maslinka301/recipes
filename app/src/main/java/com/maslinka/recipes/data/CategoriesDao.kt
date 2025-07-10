@@ -8,7 +8,7 @@ import com.maslinka.recipes.model.Category
 
 @Dao
 interface CategoriesDao {
-    @Query ("SELECT * FROM Category")
+    @Query("SELECT * FROM Category")
     fun getAllCategories(): List<Category>
 
     @Insert
