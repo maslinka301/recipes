@@ -47,9 +47,12 @@ class RecipesRepository(context: Context) {
                 val response = service.getRecipesByCategoryId(id.toString()).execute()
                 Log.d("!!!", response.code().toString())
                 val result = if (response.isSuccessful) response.body() else null
-                if (result != null){
+                if (result != null) {
                     val resultForCache = result.map { it.copy(categoryId = id) }
-                    db.recipesDao().addRecipes(resultForCache)
+                    val favouriteList = db.recipesDao().getFavouritesRecipes()
+                    val favouriteIds = favouriteList.map { it.id }.toSet()
+                    val newResultForCache = resultForCache.map { it.copy(isFavorite = it.id in favouriteIds) }
+                    db.recipesDao().addRecipes(newResultForCache)
                 }
                 result
             } catch (e: Exception) {
@@ -105,15 +108,33 @@ class RecipesRepository(context: Context) {
         }
     }
 
-    suspend fun getCategoriesFromCache(): List<Category>{
-        return withContext(Dispatchers.IO){
+    suspend fun getCategoriesFromCache(): List<Category> {
+        return withContext(Dispatchers.IO) {
             db.categoriesDao().getAllCategories()
         }
     }
 
-    suspend fun getRecipesFromCache(categoryId: Int): List<Recipe>{
-        return withContext(Dispatchers.IO){
+    suspend fun getRecipesFromCache(categoryId: Int): List<Recipe> {
+        return withContext(Dispatchers.IO) {
             db.recipesDao().getRecipesByCategoryId(categoryId)
+        }
+    }
+
+    suspend fun getFavouritesRecipesFromCache(): List<Recipe>{
+        return withContext(Dispatchers.IO){
+            db.recipesDao().getFavouritesRecipes()
+        }
+    }
+
+    suspend fun updateFavouritesInCache(recipeId: Int, isFavourite: Boolean){
+        withContext(Dispatchers.IO){
+            db.recipesDao().updateFavourites(recipeId, isFavourite)
+        }
+    }
+
+    suspend fun getFavouriteStatus(recipeId: Int): Boolean{
+        return withContext(Dispatchers.IO){
+            db.recipesDao().getFavouriteStatus(recipeId)
         }
     }
 }

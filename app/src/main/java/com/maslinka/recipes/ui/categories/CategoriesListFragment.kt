@@ -5,9 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.FragmentListCategoriesBinding
 import com.maslinka.recipes.model.Category
 
@@ -63,6 +65,7 @@ class CategoriesListFragment : Fragment() {
                 navigateToRecipesList(it)
                 categoriesListViewModel.navigationReset()
             }
+            showNetworkErrorToast(state)
         }
     }
 
@@ -71,6 +74,17 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun navigateToRecipesList(category: Category) {
-        findNavController().navigate(CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(category))
+        findNavController().navigate(
+            CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
+                category
+            )
+        )
+    }
+
+    private fun showNetworkErrorToast(state: CategoriesListViewModel.CategoriesListState) {
+        if (state.showNetworkError) {
+            Toast.makeText(requireContext(), R.string.network_error, Toast.LENGTH_SHORT).show()
+            categoriesListViewModel.resetError()
+        }
     }
 }

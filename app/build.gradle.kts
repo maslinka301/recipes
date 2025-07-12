@@ -63,15 +63,15 @@ dependencies {
     implementation(libs.androidx.navigation.ui)
 
     implementation(libs.kotlinx.serialization.json)
-    implementation (libs.retrofit2.converter.kotlinx.serialization)
-    implementation (libs.glide)
+    implementation(libs.retrofit2.converter.kotlinx.serialization)
+    implementation(libs.glide)
 
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
     implementation(libs.retrofit)
-    implementation (libs.converter.gson)
+    implementation(libs.converter.gson)
 
     implementation(libs.androidx.room.runtime)
-    ksp (libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
 }
 

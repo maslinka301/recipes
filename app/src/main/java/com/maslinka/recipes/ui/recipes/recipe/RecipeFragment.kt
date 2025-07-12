@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -67,6 +68,7 @@ class RecipeFragment : Fragment() {
             updateRecipeInfo(state)
             updateServings(state)
             updateIconHeartImage(state)
+            showNetworkErrorToast(state)
         }
     }
 
@@ -150,6 +152,13 @@ class RecipeFragment : Fragment() {
         with(binding) {
             rvIngredients.addItemDecoration(dividerItemDecoration)
             rvMethod.addItemDecoration(dividerItemDecoration)
+        }
+    }
+
+    private fun showNetworkErrorToast(state: RecipeViewModel.RecipeState) {
+        if (state.showNetworkError) {
+            Toast.makeText(requireContext(), R.string.network_error, Toast.LENGTH_SHORT).show()
+            recipeViewModel.resetError()
         }
     }
 

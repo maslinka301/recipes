@@ -11,8 +11,6 @@ import androidx.lifecycle.viewModelScope
 import com.maslinka.recipes.R
 import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Recipe
-import com.maslinka.recipes.ui.AccessToPreferences.getFavourites
-import com.maslinka.recipes.ui.AccessToPreferences.saveFavourites
 import com.maslinka.recipes.ui.Constants.IMAGE_URL
 import kotlinx.coroutines.launch
 
@@ -40,7 +38,8 @@ class RecipeViewModel(
         viewModelScope.launch {
             val result = recipesRepository.getRecipeById(recipeId)
             if (result != null) {
-                val isFavourite = recipeId in getFavourites(appContext)
+                val isFavourite =
+                    recipesRepository.getFavouriteStatus(recipeId) //recipeId in getFavourites(appContext) //
                 val recipeDrawable = IMAGE_URL + result.imageUrl
                 _recipeState.value = recipeState.value?.copy(
                     recipe = result,
@@ -52,10 +51,14 @@ class RecipeViewModel(
                     recipeImageUrl = recipeDrawable
                 )
             } else {
-                Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_SHORT).show()
+                _recipeState.value = recipeState.value?.copy(showNetworkError = true)
+                //Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_SHORT).show()
             }
         }
+    }
 
+    fun resetError() {
+        _recipeState.value = recipeState.value?.copy(showNetworkError = false)
     }
 
     fun updateServings(servings: Int) {
@@ -63,16 +66,23 @@ class RecipeViewModel(
     }
 
     fun onFavoritesClicked(recipeId: Int) {
-        val favouriteSet = getFavourites(appContext)
-        val currentState = _recipeState.value ?: return
-        if (recipeId in favouriteSet) {
-            favouriteSet.remove(recipeId)
-            _recipeState.value = currentState.copy(isFavourite = false)
-        } else {
-            favouriteSet.add(recipeId)
-            _recipeState.value = currentState.copy(isFavourite = true)
+        viewModelScope.launch {
+            val favouriteSet =
+                recipesRepository.getFavouritesRecipesFromCache() //getFavourites(appContext) //
+            val isFavourite = recipesRepository.getFavouriteStatus(recipeId)
+            val currentState = _recipeState.value ?: return@launch
+            if (isFavourite) {
+                //favouriteSet.remove(recipeId)
+                _recipeState.value = currentState.copy(isFavourite = false)
+                recipesRepository.updateFavouritesInCache(recipeId, false)
+            } else {
+                //favouriteSet.add(recipeId)
+                _recipeState.value = currentState.copy(isFavourite = true)
+                recipesRepository.updateFavouritesInCache(recipeId, true)
+            }
+            //saveFavourites(appContext, favouriteSet)
         }
-        saveFavourites(appContext, favouriteSet)
+
     }
 
 
@@ -81,6 +91,7 @@ class RecipeViewModel(
         val numberOfServings: Int = 1,
         val isFavourite: Boolean = false,
         val recipeImageUrl: String? = null,
+        val showNetworkError: Boolean = false,
     )
 
 }
