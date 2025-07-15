@@ -6,13 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.maslinka.recipes.R
+import com.maslinka.recipes.RecipeApplication
 import com.maslinka.recipes.databinding.FragmentFavouritesBinding
 import com.maslinka.recipes.ui.categories.RecyclerViewsAdapter
-import com.maslinka.recipes.ui.recipes.recipe.RecipeViewModel
 
 class FavouritesFragment : Fragment() {
 
@@ -22,7 +20,15 @@ class FavouritesFragment : Fragment() {
 
     private val favouritesAdapter = RecyclerViewsAdapter()
 
-    private val favouritesViewModel: FavouritesViewModel by viewModels()
+    private lateinit var favouritesViewModel: FavouritesViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer = (requireContext().applicationContext as RecipeApplication).appContainer
+        favouritesViewModel = FavouritesViewModel(appContainer.repository)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

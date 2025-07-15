@@ -1,22 +1,17 @@
 package com.maslinka.recipes.ui.recipes.recipeList
 
-import android.app.Application
-import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.maslinka.recipes.R
 import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Recipe
 import com.maslinka.recipes.ui.Constants.IMAGE_URL
 import kotlinx.coroutines.launch
 
-class RecipeListViewModel(application: Application) : AndroidViewModel(application) {
+class RecipeListViewModel(private val recipesRepository:RecipesRepository) : ViewModel() {
 
-    private val appContext = application.applicationContext
 
-    private val recipesRepository = RecipesRepository(appContext)
 
     private val _recipeListState = MutableLiveData<RecipeListState>()
     val recipeListState: LiveData<RecipeListState>
