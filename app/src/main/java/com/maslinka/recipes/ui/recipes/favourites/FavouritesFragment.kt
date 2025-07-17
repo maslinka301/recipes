@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.maslinka.recipes.R
 import com.maslinka.recipes.RecipeApplication
 import com.maslinka.recipes.databinding.FragmentFavouritesBinding
 import com.maslinka.recipes.ui.categories.RecyclerViewsAdapter
@@ -26,7 +24,7 @@ class FavouritesFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val appContainer = (requireContext().applicationContext as RecipeApplication).appContainer
-        favouritesViewModel = FavouritesViewModel(appContainer.repository)
+        favouritesViewModel = appContainer.favouritesViewModel.create()
 
     }
 
@@ -60,7 +58,6 @@ class FavouritesFragment : Fragment() {
         favouritesViewModel.favouritesState.observe(viewLifecycleOwner) { state ->
             updateUI(state)
             updateRecycler(state)
-            showNetworkErrorToast(state)
         }
     }
 
@@ -90,12 +87,6 @@ class FavouritesFragment : Fragment() {
         }
     }
 
-    private fun showNetworkErrorToast(state: FavouritesViewModel.FavouritesState) {
-        if (state.showNetworkError) {
-            Toast.makeText(requireContext(), R.string.network_error, Toast.LENGTH_SHORT).show()
-            favouritesViewModel.resetError()
-        }
-    }
 
     fun openRecipeByRecipeId(recipeId: Int) {
         findNavController().navigate(

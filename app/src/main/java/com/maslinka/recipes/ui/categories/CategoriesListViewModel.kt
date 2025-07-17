@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.maslinka.recipes.R
+import com.maslinka.recipes.common.Event
 import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Category
 import kotlinx.coroutines.launch
@@ -15,6 +17,10 @@ class CategoriesListViewModel(private val recipesRepository: RecipesRepository) 
     private val _categoryListState = MutableLiveData<CategoriesListState>()
     val categoryListState: LiveData<CategoriesListState>
         get() = _categoryListState
+
+    private val _showToast = MutableLiveData<Event<Int>>()
+    val showToast: LiveData<Event<Int>>
+        get() = _showToast
 
     fun loadCategoriesFromCache() {
         viewModelScope.launch {
@@ -33,7 +39,7 @@ class CategoriesListViewModel(private val recipesRepository: RecipesRepository) 
                     categoriesList = result
                 )
             } else {
-                _categoryListState.value = categoryListState.value?.copy(showNetworkError = true)
+                _showToast.value = Event(R.string.network_error)
             }
         }
     }
@@ -46,7 +52,7 @@ class CategoriesListViewModel(private val recipesRepository: RecipesRepository) 
                     navigationData = result
                 )
             } else {
-                _categoryListState.value = categoryListState.value?.copy(showNetworkError = true)
+                _showToast.value = Event(R.string.network_error)
             }
         }
     }
@@ -55,13 +61,9 @@ class CategoriesListViewModel(private val recipesRepository: RecipesRepository) 
         _categoryListState.value = _categoryListState.value?.copy(navigationData = null)
     }
 
-    fun resetError() {
-        _categoryListState.value = categoryListState.value?.copy(showNetworkError = false)
-    }
 
     data class CategoriesListState(
         val categoriesList: List<Category> = emptyList(),
         val navigationData: Category? = null,
-        val showNetworkError: Boolean = false,
     )
 }

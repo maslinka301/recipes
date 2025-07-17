@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.maslinka.recipes.R
+import com.maslinka.recipes.common.Event
 import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Recipe
 import kotlinx.coroutines.launch
@@ -16,6 +17,7 @@ class FavouritesViewModel(private val recipesRepository: RecipesRepository) : Vi
     private val _favouritesState = MutableLiveData<FavouritesState>()
     val favouritesState: LiveData<FavouritesState>
         get() = _favouritesState
+
 
 
     fun initState() {
@@ -36,9 +38,6 @@ class FavouritesViewModel(private val recipesRepository: RecipesRepository) : Vi
         }
     }
 
-    fun resetError() {
-        _favouritesState.value = favouritesState.value?.copy(showNetworkError = false)
-    }
 
 
     data class FavouritesState(
@@ -46,6 +45,5 @@ class FavouritesViewModel(private val recipesRepository: RecipesRepository) : Vi
         val contentDescription: Int? = null,
         val favouritesList: List<Recipe> = emptyList(),
         val listIsEmpty: Boolean = true,
-        val showNetworkError: Boolean = false,
     )
 }

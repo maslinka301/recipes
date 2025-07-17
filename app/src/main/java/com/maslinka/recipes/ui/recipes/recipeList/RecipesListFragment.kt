@@ -29,7 +29,7 @@ class RecipesListFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val appContainer = (requireContext().applicationContext as RecipeApplication).appContainer
-        recipeListViewModel = RecipeListViewModel(appContainer.repository)
+        recipeListViewModel = appContainer.recipeListViewModel.create()
     }
 
     override fun onCreateView(
@@ -76,7 +76,11 @@ class RecipesListFragment : Fragment() {
         recipeListViewModel.recipeListState.observe(viewLifecycleOwner) { state ->
             updateUIInfo(state)
             updateRecycler(state)
-            showNetworkErrorToast(state)
+        }
+        recipeListViewModel.showToast.observe(viewLifecycleOwner) { state ->
+            state.getContentIfNotHandled()?.let{ resId ->
+                Toast.makeText(requireContext(), getString(resId), Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -108,11 +112,5 @@ class RecipesListFragment : Fragment() {
             .into(binding.ivRecipeListHeaderImage)
     }
 
-    private fun showNetworkErrorToast(state: RecipeListViewModel.RecipeListState) {
-        if (state.showNetworkError) {
-            Toast.makeText(requireContext(), R.string.network_error, Toast.LENGTH_SHORT).show()
-            recipeListViewModel.resetError()
-        }
-    }
 
 }

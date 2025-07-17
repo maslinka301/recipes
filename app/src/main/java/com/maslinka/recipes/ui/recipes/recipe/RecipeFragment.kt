@@ -34,7 +34,7 @@ class RecipeFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val appContainer = (requireContext().applicationContext as RecipeApplication).appContainer
-        recipeViewModel = RecipeViewModel(appContainer.repository)
+        recipeViewModel = appContainer.recipeViewModel.create()
 
     }
 
@@ -75,7 +75,13 @@ class RecipeFragment : Fragment() {
             updateRecipeInfo(state)
             updateServings(state)
             updateIconHeartImage(state)
-            showNetworkErrorToast(state)
+        }
+
+        recipeViewModel.showToast.observe(viewLifecycleOwner) { state ->
+            state.getContentIfNotHandled()?.let { resId ->
+                Toast.makeText(requireContext(), getString(resId), Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
 
@@ -159,13 +165,6 @@ class RecipeFragment : Fragment() {
         with(binding) {
             rvIngredients.addItemDecoration(dividerItemDecoration)
             rvMethod.addItemDecoration(dividerItemDecoration)
-        }
-    }
-
-    private fun showNetworkErrorToast(state: RecipeViewModel.RecipeState) {
-        if (state.showNetworkError) {
-            Toast.makeText(requireContext(), R.string.network_error, Toast.LENGTH_SHORT).show()
-            recipeViewModel.resetError()
         }
     }
 

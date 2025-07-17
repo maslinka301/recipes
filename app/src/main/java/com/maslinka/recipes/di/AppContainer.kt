@@ -20,4 +20,12 @@ class AppContainer(context: Context) {
     private val db = RecipesDatabase.getDatabase(context)
 
     val repository = RecipesRepository(service, db)
+
+    val categoriesListViewModel = CategoriesListViewModelFactory(repository)
+    val recipeListViewModel = RecipesListViewModelFactory(repository)
+    val favouritesViewModel = FavoritesViewModelFactory(repository)
+    val recipeViewModel = RecipeViewModelFactory(repository)
+
+
+
 }
