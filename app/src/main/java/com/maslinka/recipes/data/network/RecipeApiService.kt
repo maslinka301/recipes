@@ -1,4 +1,4 @@
-package com.maslinka.recipes.data
+package com.maslinka.recipes.data.network
 
 import com.maslinka.recipes.model.Category
 import com.maslinka.recipes.model.Recipe

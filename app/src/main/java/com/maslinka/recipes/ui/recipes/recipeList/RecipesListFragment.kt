@@ -6,26 +6,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.maslinka.recipes.R
+import com.maslinka.recipes.RecipeApplication
 import com.maslinka.recipes.databinding.FragmentListRecipesBinding
 import com.maslinka.recipes.ui.categories.RecyclerViewsAdapter
-import com.maslinka.recipes.ui.recipes.recipe.RecipeViewModel
 
 class RecipesListFragment : Fragment() {
     private var _binding: FragmentListRecipesBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("binding не инициализировано")
 
-    private val recipeListViewModel: RecipeListViewModel by viewModels()
+    private lateinit var recipeListViewModel: RecipeListViewModel
 
     private val recipeListAdapter = RecyclerViewsAdapter()
 
     private val recipesListFragmentArgs: RecipesListFragmentArgs by navArgs()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer = (requireContext().applicationContext as RecipeApplication).appContainer
+        recipeListViewModel = appContainer.recipeListViewModel.create()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,7 +76,11 @@ class RecipesListFragment : Fragment() {
         recipeListViewModel.recipeListState.observe(viewLifecycleOwner) { state ->
             updateUIInfo(state)
             updateRecycler(state)
-            showNetworkErrorToast(state)
+        }
+        recipeListViewModel.showToast.observe(viewLifecycleOwner) { state ->
+            state.getContentIfNotHandled()?.let{ resId ->
+                Toast.makeText(requireContext(), getString(resId), Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -103,11 +112,5 @@ class RecipesListFragment : Fragment() {
             .into(binding.ivRecipeListHeaderImage)
     }
 
-    private fun showNetworkErrorToast(state: RecipeListViewModel.RecipeListState) {
-        if (state.showNetworkError) {
-            Toast.makeText(requireContext(), R.string.network_error, Toast.LENGTH_SHORT).show()
-            recipeListViewModel.resetError()
-        }
-    }
 
 }

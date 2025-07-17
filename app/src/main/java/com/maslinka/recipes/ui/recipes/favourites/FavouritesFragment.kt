@@ -4,15 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
-import com.maslinka.recipes.R
+import com.maslinka.recipes.RecipeApplication
 import com.maslinka.recipes.databinding.FragmentFavouritesBinding
 import com.maslinka.recipes.ui.categories.RecyclerViewsAdapter
-import com.maslinka.recipes.ui.recipes.recipe.RecipeViewModel
 
 class FavouritesFragment : Fragment() {
 
@@ -22,7 +18,15 @@ class FavouritesFragment : Fragment() {
 
     private val favouritesAdapter = RecyclerViewsAdapter()
 
-    private val favouritesViewModel: FavouritesViewModel by viewModels()
+    private lateinit var favouritesViewModel: FavouritesViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer = (requireContext().applicationContext as RecipeApplication).appContainer
+        favouritesViewModel = appContainer.favouritesViewModel.create()
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,7 +58,6 @@ class FavouritesFragment : Fragment() {
         favouritesViewModel.favouritesState.observe(viewLifecycleOwner) { state ->
             updateUI(state)
             updateRecycler(state)
-            showNetworkErrorToast(state)
         }
     }
 
@@ -84,12 +87,6 @@ class FavouritesFragment : Fragment() {
         }
     }
 
-    private fun showNetworkErrorToast(state: FavouritesViewModel.FavouritesState) {
-        if (state.showNetworkError) {
-            Toast.makeText(requireContext(), R.string.network_error, Toast.LENGTH_SHORT).show()
-            favouritesViewModel.resetError()
-        }
-    }
 
     fun openRecipeByRecipeId(recipeId: Int) {
         findNavController().navigate(

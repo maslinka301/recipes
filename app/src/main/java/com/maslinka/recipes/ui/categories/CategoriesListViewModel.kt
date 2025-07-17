@@ -1,27 +1,26 @@
 package com.maslinka.recipes.ui.categories
 
 
-import android.app.Application
-import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.maslinka.recipes.R
-import com.maslinka.recipes.data.RecipesDatabase
+import com.maslinka.recipes.common.Event
 import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Category
 import kotlinx.coroutines.launch
 
 
-class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
+class CategoriesListViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
 
-    private val appContext = application.applicationContext
-
-    private val recipesRepository = RecipesRepository(appContext)
     private val _categoryListState = MutableLiveData<CategoriesListState>()
     val categoryListState: LiveData<CategoriesListState>
         get() = _categoryListState
+
+    private val _showToast = MutableLiveData<Event<Int>>()
+    val showToast: LiveData<Event<Int>>
+        get() = _showToast
 
     fun loadCategoriesFromCache() {
         viewModelScope.launch {
@@ -40,8 +39,7 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
                     categoriesList = result
                 )
             } else {
-                _categoryListState.value = categoryListState.value?.copy(showNetworkError = true)
-                //Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_LONG).show()
+                _showToast.value = Event(R.string.network_error)
             }
         }
     }
@@ -54,7 +52,7 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
                     navigationData = result
                 )
             } else {
-                Toast.makeText(appContext, R.string.network_error, Toast.LENGTH_LONG).show()
+                _showToast.value = Event(R.string.network_error)
             }
         }
     }
@@ -63,13 +61,9 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
         _categoryListState.value = _categoryListState.value?.copy(navigationData = null)
     }
 
-    fun resetError() {
-        _categoryListState.value = categoryListState.value?.copy(showNetworkError = false)
-    }
 
     data class CategoriesListState(
         val categoriesList: List<Category> = emptyList(),
         val navigationData: Category? = null,
-        val showNetworkError: Boolean = false,
     )
 }

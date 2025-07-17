@@ -1,28 +1,19 @@
 package com.maslinka.recipes.data
 
-import android.content.Context
 import com.maslinka.recipes.model.Category
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import android.util.Log
+import com.maslinka.recipes.data.db.RecipesDatabase
+import com.maslinka.recipes.data.network.RecipeApiService
 import com.maslinka.recipes.model.Recipe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class RecipesRepository(context: Context) {
+class RecipesRepository(
+    private val service: RecipeApiService,
+    private val db: RecipesDatabase
+) {
 
-    private var retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl("https://recipes.androidsprint.ru/api/")
-        //.addConverterFactory(GsonConverterFactory.create())
-        .addConverterFactory(Json.asConverterFactory("application/json; charset=UTF8".toMediaType()))
-        .build()
-
-    private var service: RecipeApiService = retrofit.create(RecipeApiService::class.java)
-
-    private val db = RecipesDatabase.getDatabase(context)
 
     suspend fun getCategories(): List<Category>? {
         return withContext(Dispatchers.IO) {
@@ -51,7 +42,8 @@ class RecipesRepository(context: Context) {
                     val resultForCache = result.map { it.copy(categoryId = id) }
                     val favouriteList = db.recipesDao().getFavouritesRecipes()
                     val favouriteIds = favouriteList.map { it.id }.toSet()
-                    val newResultForCache = resultForCache.map { it.copy(isFavorite = it.id in favouriteIds) }
+                    val newResultForCache =
+                        resultForCache.map { it.copy(isFavorite = it.id in favouriteIds) }
                     db.recipesDao().addRecipes(newResultForCache)
                 }
                 result
@@ -120,20 +112,20 @@ class RecipesRepository(context: Context) {
         }
     }
 
-    suspend fun getFavouritesRecipesFromCache(): List<Recipe>{
-        return withContext(Dispatchers.IO){
+    suspend fun getFavouritesRecipesFromCache(): List<Recipe> {
+        return withContext(Dispatchers.IO) {
             db.recipesDao().getFavouritesRecipes()
         }
     }
 
-    suspend fun updateFavouritesInCache(recipeId: Int, isFavourite: Boolean){
-        withContext(Dispatchers.IO){
+    suspend fun updateFavouritesInCache(recipeId: Int, isFavourite: Boolean) {
+        withContext(Dispatchers.IO) {
             db.recipesDao().updateFavourites(recipeId, isFavourite)
         }
     }
 
-    suspend fun getFavouriteStatus(recipeId: Int): Boolean{
-        return withContext(Dispatchers.IO){
+    suspend fun getFavouriteStatus(recipeId: Int): Boolean {
+        return withContext(Dispatchers.IO) {
             db.recipesDao().getFavouriteStatus(recipeId)
         }
     }

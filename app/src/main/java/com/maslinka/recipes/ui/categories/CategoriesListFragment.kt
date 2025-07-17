@@ -7,9 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.maslinka.recipes.R
+import com.maslinka.recipes.RecipeApplication
 import com.maslinka.recipes.databinding.FragmentListCategoriesBinding
 import com.maslinka.recipes.model.Category
 
@@ -21,7 +20,14 @@ class CategoriesListFragment : Fragment() {
 
     private val categoriesListAdapter = RecyclerViewsAdapter()
 
-    private val categoriesListViewModel: CategoriesListViewModel by viewModels()
+    private lateinit var categoriesListViewModel: CategoriesListViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer = (requireContext().applicationContext as RecipeApplication).appContainer
+        categoriesListViewModel = appContainer.categoriesListViewModel.create()
+    }
 
 
     override fun onCreateView(
@@ -65,7 +71,11 @@ class CategoriesListFragment : Fragment() {
                 navigateToRecipesList(it)
                 categoriesListViewModel.navigationReset()
             }
-            showNetworkErrorToast(state)
+        }
+        categoriesListViewModel.showToast.observe(viewLifecycleOwner){ state ->
+            state.getContentIfNotHandled()?.let { resId ->
+                Toast.makeText(requireContext(), getString(resId), Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -79,12 +89,5 @@ class CategoriesListFragment : Fragment() {
                 category
             )
         )
-    }
-
-    private fun showNetworkErrorToast(state: CategoriesListViewModel.CategoriesListState) {
-        if (state.showNetworkError) {
-            Toast.makeText(requireContext(), R.string.network_error, Toast.LENGTH_SHORT).show()
-            categoriesListViewModel.resetError()
-        }
     }
 }

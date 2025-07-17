@@ -1,4 +1,4 @@
-package com.maslinka.recipes.data
+package com.maslinka.recipes.data.db
 
 import androidx.room.TypeConverter
 import com.maslinka.recipes.model.Ingredient
