@@ -9,12 +9,12 @@ import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.maslinka.recipes.R
+import com.maslinka.recipes.RecipeApplication
 import com.maslinka.recipes.databinding.FragmentRecipeBinding
 
 
@@ -23,13 +23,20 @@ class RecipeFragment : Fragment() {
     private val binding
         get() = _binding ?: throw IllegalStateException("binding не инициализировано")
 
-    private val recipeViewModel: RecipeViewModel by viewModels()
+    private lateinit var recipeViewModel: RecipeViewModel
 
     private var ingredientsAdapter = IngredientsAdapter()
     private var methodAdapter = MethodAdapter()
 
     private val recipeFragmentArgs: RecipeFragmentArgs by navArgs()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer = (requireContext().applicationContext as RecipeApplication).appContainer
+        recipeViewModel = appContainer.recipeViewModel.create()
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,7 +75,13 @@ class RecipeFragment : Fragment() {
             updateRecipeInfo(state)
             updateServings(state)
             updateIconHeartImage(state)
-            showNetworkErrorToast(state)
+        }
+
+        recipeViewModel.showToast.observe(viewLifecycleOwner) { state ->
+            state.getContentIfNotHandled()?.let { resId ->
+                Toast.makeText(requireContext(), getString(resId), Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
 
@@ -152,13 +165,6 @@ class RecipeFragment : Fragment() {
         with(binding) {
             rvIngredients.addItemDecoration(dividerItemDecoration)
             rvMethod.addItemDecoration(dividerItemDecoration)
-        }
-    }
-
-    private fun showNetworkErrorToast(state: RecipeViewModel.RecipeState) {
-        if (state.showNetworkError) {
-            Toast.makeText(requireContext(), R.string.network_error, Toast.LENGTH_SHORT).show()
-            recipeViewModel.resetError()
         }
     }
 

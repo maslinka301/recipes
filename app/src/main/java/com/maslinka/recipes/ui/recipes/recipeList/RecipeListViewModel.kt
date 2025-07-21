@@ -1,26 +1,25 @@
 package com.maslinka.recipes.ui.recipes.recipeList
 
-import android.app.Application
-import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.maslinka.recipes.R
+import com.maslinka.recipes.common.Event
 import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Recipe
 import com.maslinka.recipes.ui.Constants.IMAGE_URL
 import kotlinx.coroutines.launch
 
-class RecipeListViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val appContext = application.applicationContext
-
-    private val recipesRepository = RecipesRepository(appContext)
+class RecipeListViewModel(private val recipesRepository:RecipesRepository) : ViewModel() {
 
     private val _recipeListState = MutableLiveData<RecipeListState>()
     val recipeListState: LiveData<RecipeListState>
         get() = _recipeListState
+
+    private val _showToast = MutableLiveData<Event<Int>>()
+    val showToast: LiveData<Event<Int>>
+        get() = _showToast
 
 
     fun initState(categoryId: Int?, categoryName: String?, categoryImageUrl: String?) {
@@ -37,10 +36,6 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
             getRecipeListFromCache(it)
             getRecipeList(it)
         }
-    }
-
-    fun resetError() {
-        _recipeListState.value = recipeListState.value?.copy(showNetworkError = false)
     }
 
     private fun getRecipeListFromCache(categoryId: Int) {
@@ -61,7 +56,7 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
                     recipeList = result
                 )
             } else {
-                _recipeListState.value = recipeListState.value?.copy(showNetworkError = true)
+                _showToast.value = Event(R.string.network_error)
             }
         }
     }
@@ -72,6 +67,5 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
         val categoryName: String? = null,
         val categoryImageUrl: String? = null,
         val recipeList: List<Recipe> = emptyList(),
-        val showNetworkError: Boolean = false,
     )
 }

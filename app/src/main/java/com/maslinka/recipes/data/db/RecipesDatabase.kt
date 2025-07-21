@@ -1,4 +1,4 @@
-package com.maslinka.recipes.data
+package com.maslinka.recipes.data.db
 
 import android.content.Context
 import androidx.room.Database
@@ -7,6 +7,8 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.maslinka.recipes.data.db.dao.CategoriesDao
+import com.maslinka.recipes.data.db.dao.RecipesDao
 import com.maslinka.recipes.model.Category
 import com.maslinka.recipes.model.Recipe
 

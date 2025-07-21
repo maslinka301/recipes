@@ -1,25 +1,23 @@
 package com.maslinka.recipes.ui.recipes.favourites
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.maslinka.recipes.R
+import com.maslinka.recipes.common.Event
 import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Recipe
 import kotlinx.coroutines.launch
 
-class FavouritesViewModel(application: Application) : AndroidViewModel(application) {
+class FavouritesViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
 
-    private val appContext = application.applicationContext
-
-    private val recipesRepository = RecipesRepository(appContext)
 
     private val _favouritesState = MutableLiveData<FavouritesState>()
     val favouritesState: LiveData<FavouritesState>
         get() = _favouritesState
+
 
 
     fun initState() {
@@ -40,30 +38,6 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-//    fun updateFavouritesList() {
-//        viewModelScope.launch {
-//            val result = recipesRepository.getRecipesByIds(
-//                AccessToPreferences.getFavourites(appContext.applicationContext)
-//            )
-//            if (result != null) {
-//                _favouritesState.value = favouritesState.value?.copy(
-//                    favouritesList = result,
-//                    listIsEmpty = result.isEmpty()
-//                ) ?: FavouritesState(
-//                    favouritesList = result,
-//                    listIsEmpty = result.isEmpty(),
-//                    headerImageUrl = R.drawable.bcg_favorites,
-//                    contentDescription = R.string.content_description_favourites_fragment,
-//                )
-//            } else {
-//                _favouritesState.value = favouritesState.value?.copy(showNetworkError = true)
-//            }
-//        }
-//    }
-
-    fun resetError() {
-        _favouritesState.value = favouritesState.value?.copy(showNetworkError = false)
-    }
 
 
     data class FavouritesState(
@@ -71,6 +45,5 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
         val contentDescription: Int? = null,
         val favouritesList: List<Recipe> = emptyList(),
         val listIsEmpty: Boolean = true,
-        val showNetworkError: Boolean = false,
     )
 }
