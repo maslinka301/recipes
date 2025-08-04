@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.maslinka.recipes.RecipeApplication
 import com.maslinka.recipes.databinding.FragmentListCategoriesBinding
 import com.maslinka.recipes.model.Category
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CategoriesListFragment : Fragment() {
 
     private var _binding: FragmentListCategoriesBinding? = null
@@ -20,14 +22,7 @@ class CategoriesListFragment : Fragment() {
 
     private val categoriesListAdapter = RecyclerViewsAdapter()
 
-    private lateinit var categoriesListViewModel: CategoriesListViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val appContainer = (requireContext().applicationContext as RecipeApplication).appContainer
-        categoriesListViewModel = appContainer.categoriesListViewModel.create()
-    }
+    private val categoriesListViewModel: CategoriesListViewModel by viewModels()
 
 
     override fun onCreateView(

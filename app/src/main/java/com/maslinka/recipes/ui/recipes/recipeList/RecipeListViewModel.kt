@@ -9,9 +9,12 @@ import com.maslinka.recipes.common.Event
 import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Recipe
 import com.maslinka.recipes.ui.Constants.IMAGE_URL
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecipeListViewModel(private val recipesRepository:RecipesRepository) : ViewModel() {
+@HiltViewModel
+class RecipeListViewModel @Inject constructor(private val recipesRepository:RecipesRepository) : ViewModel() {
 
     private val _recipeListState = MutableLiveData<RecipeListState>()
     val recipeListState: LiveData<RecipeListState>

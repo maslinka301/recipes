@@ -6,12 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.maslinka.recipes.R
-import com.maslinka.recipes.common.Event
 import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Recipe
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FavouritesViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
+@HiltViewModel
+class FavouritesViewModel @Inject constructor(private val recipesRepository: RecipesRepository) : ViewModel() {
 
 
     private val _favouritesState = MutableLiveData<FavouritesState>()

@@ -8,8 +8,9 @@ import com.maslinka.recipes.data.network.RecipeApiService
 import com.maslinka.recipes.model.Recipe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class RecipesRepository(
+class RecipesRepository @Inject constructor(
     private val service: RecipeApiService,
     private val db: RecipesDatabase
 ) {
