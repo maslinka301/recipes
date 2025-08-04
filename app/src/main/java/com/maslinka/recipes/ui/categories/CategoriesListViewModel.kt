@@ -9,10 +9,14 @@ import com.maslinka.recipes.R
 import com.maslinka.recipes.common.Event
 import com.maslinka.recipes.data.RecipesRepository
 import com.maslinka.recipes.model.Category
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
-class CategoriesListViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
+@HiltViewModel
+class CategoriesListViewModel @Inject constructor(private val recipesRepository: RecipesRepository) :
+    ViewModel() {
 
     private val _categoryListState = MutableLiveData<CategoriesListState>()
     val categoryListState: LiveData<CategoriesListState>

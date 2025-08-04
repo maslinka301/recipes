@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.maslinka.recipes.R
 import com.maslinka.recipes.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     //биндинг будет инициализирован с помощью inflate() только при первом обращении к нему

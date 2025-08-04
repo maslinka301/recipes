@@ -6,31 +6,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.maslinka.recipes.R
-import com.maslinka.recipes.RecipeApplication
 import com.maslinka.recipes.databinding.FragmentListRecipesBinding
 import com.maslinka.recipes.ui.categories.RecyclerViewsAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RecipesListFragment : Fragment() {
     private var _binding: FragmentListRecipesBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("binding не инициализировано")
 
-    private lateinit var recipeListViewModel: RecipeListViewModel
+    private val recipeListViewModel: RecipeListViewModel by viewModels()
 
     private val recipeListAdapter = RecyclerViewsAdapter()
 
     private val recipesListFragmentArgs: RecipesListFragmentArgs by navArgs()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val appContainer = (requireContext().applicationContext as RecipeApplication).appContainer
-        recipeListViewModel = appContainer.recipeListViewModel.create()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

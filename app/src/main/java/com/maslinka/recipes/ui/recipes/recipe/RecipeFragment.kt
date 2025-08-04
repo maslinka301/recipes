@@ -9,34 +9,28 @@ import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.maslinka.recipes.R
-import com.maslinka.recipes.RecipeApplication
 import com.maslinka.recipes.databinding.FragmentRecipeBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class RecipeFragment : Fragment() {
     private var _binding: FragmentRecipeBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("binding не инициализировано")
 
-    private lateinit var recipeViewModel: RecipeViewModel
+    private val recipeViewModel: RecipeViewModel by viewModels()
 
     private var ingredientsAdapter = IngredientsAdapter()
     private var methodAdapter = MethodAdapter()
 
     private val recipeFragmentArgs: RecipeFragmentArgs by navArgs()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val appContainer = (requireContext().applicationContext as RecipeApplication).appContainer
-        recipeViewModel = appContainer.recipeViewModel.create()
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
